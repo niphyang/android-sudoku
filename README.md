@@ -8,4 +8,5 @@
   + 구글플레이 게임서비스 연동 (로그인, 랭킹 등)
 
 ### 2. 참고
-1) UI : https://www.youtube.com/watch?v=o6P05m0E9z4
+  + UI
+    - https://www.youtube.com/watch?v=o6P05m0E9z4
