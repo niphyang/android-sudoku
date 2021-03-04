@@ -42,25 +42,26 @@
             android:textColor="#F0F0F0"
             android:textSize="30dp"/>
         <Button
-            android:id="@+id/btnResume"
+            android:id="@+id/btnLadderBoard"
             android:layout_width="170dp"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:layout_below="@id/btnPlay"
             android:layout_margin="5dp"
             android:background="@drawable/rounded_corner"
             android:textColor="#F0F0F0"
-            android:onClick="onClickResume"
-            android:text="Resume"
-            android:visibility="invisible"
+            android:onClick="onClickLadderboard"
+            android:text="RANK"
+            android:visibility="visible"
             android:textAllCaps="false"
             android:textSize="25dp"
             />
 
         <Button
-            android:id="@+id/btnLadderBoard"
+            android:id="@+id/btnResume"
             android:layout_width="170dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/btnResume"
+            android:layout_below="@id/btnLadderBoard"
             android:layout_marginStart="5dp"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
@@ -68,12 +69,12 @@
             android:layout_marginRight="5dp"
             android:layout_marginBottom="5dp"
             android:background="@drawable/rounded_corner"
-            android:onClick="onClickLadderboard"
-            android:text="Ladderboard"
+            android:onClick="onClickResume"
+            android:text="Resume"
             android:textAllCaps="false"
             android:textColor="#F0F0F0"
-            android:textSize="25dp"
-            android:visibility="invisible" />
+            android:visibility="invisible"
+            android:textSize="25dp" />
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>
 

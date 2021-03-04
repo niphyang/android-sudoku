@@ -11,7 +11,7 @@
     <color name="HIGHLIGHT_EMPTY_CELL_COLOR">#eee</color>
     <color name="HIGHLIGHT_LOCKED_CELL_COLOR">#eee</color>
 
-    <color name="GRID_BACKGROUND_COLOR">#aaa</color>
+    <color name="GRID_BACKGROUND_COLOR">#888</color>
 
     <color name="TARGET_CELL_COLOR">#f7e600</color>
     <color name="MAIN_BUTTON_COLOR">#f7e600</color>

@@ -13,7 +13,7 @@ import android.util.DisplayMetrics;
 public class AppConstant {
     public static Point SCREEN_SIZE = null;
     public static Typeface APP_FONT = null;
-    public static int BOX_LINE_SPACING = 4;
+    public static int BOX_LINE_SPACING = 2;
     public static int BOX_HEIGHT = 0;
 
     public static void init (Context context) {
