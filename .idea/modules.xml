@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/YT-android-sudoku.iml" filepath="$PROJECT_DIR$/YT-android-sudoku.iml" group="android-sudoku" />
       <module fileurl="file://$PROJECT_DIR$/android-sudoku.iml" filepath="$PROJECT_DIR$/android-sudoku.iml" group="android-sudoku" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="android-sudoku/app" />
+      <module fileurl="file://$PROJECT_DIR$/generate_sudoku/generate_sudoku.iml" filepath="$PROJECT_DIR$/generate_sudoku/generate_sudoku.iml" group="android-sudoku/generate_sudoku" />
     </modules>
   </component>
 </project>

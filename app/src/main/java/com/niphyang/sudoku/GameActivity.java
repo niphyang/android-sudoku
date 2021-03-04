@@ -27,7 +27,10 @@ import static android.widget.Toast.LENGTH_LONG;
 
 public class GameActivity extends AppCompatActivity {
     static public final int[] NUMBER_OF_EMPTY_CELLS = {0, 30, 35, 45, 50};
-    static public final String[] DIFFICULT_NAME = {"NONE", "Easy", "Normal", "Hard", "Extreme"};
+
+    // Difficulty expected to be simple, easy, intermediate, expert, or any
+    //static public final String[] DIFFICULT_NAME = {"NONE", "Easy", "Normal", "Hard", "Extreme"};
+    static public final String[] DIFFICULT_NAME = {"NONE", "simple", "easy", "intermediate", "expert"};
 
     static private SudokuGrid grid;
     static private Numpad numpad;
@@ -44,7 +47,7 @@ public class GameActivity extends AppCompatActivity {
 
     private void generateGrid() {
         // generate a grid
-        solution = solver.getRandomGrid(NUMBER_OF_EMPTY_CELLS[difficulty]);
+        solution = solver.getRandomGrid(DIFFICULT_NAME[difficulty]);
         int[][] masks = new int[9][9];
 
         // compute masks
@@ -270,6 +273,7 @@ public class GameActivity extends AppCompatActivity {
 
     private void saveAchievement() {
         Intent intent = new Intent(this, SaveAchievementActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         intent.putExtra("difficulty", difficulty);
         intent.putExtra("elapsedSeconds", timer.getElapsedSeconds());
         startActivity(intent);

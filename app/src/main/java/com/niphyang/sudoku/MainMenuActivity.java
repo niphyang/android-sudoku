@@ -46,7 +46,9 @@ public class MainMenuActivity extends Activity {
         int btnWidth = (int) (170 * dp);
         int btnMargin = (int) (5 * dp);
         if(cursor != null && cursor.getCount() > 0) {
-            btnResume.setVisibility(View.VISIBLE);
+           // btnResume.setVisibility(View.VISIBLE);
+            btnResume.setVisibility(View.INVISIBLE);
+
             RelativeLayout.LayoutParams btnResumeParams = new RelativeLayout.LayoutParams(btnWidth, ViewGroup.LayoutParams.WRAP_CONTENT);
             btnResumeParams.addRule(RelativeLayout.BELOW, R.id.btnPlay);
             btnResumeParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
@@ -71,16 +73,19 @@ public class MainMenuActivity extends Activity {
 
     public void onClickLadderboard(View view) {
         Intent intent = new Intent(this, LadderboardActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(intent);
     }
 
     public void onClickPlay(View view) {
         Intent intent = new Intent(this, DifficultyMenuActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(intent);
     }
 
     public void onClickResume(View view) {
         Intent intent = new Intent(this, GameActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         String status, difficulty, elapsedSeconds, solutionString, gridString;
         Cursor cursor;
         try {

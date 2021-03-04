@@ -1,5 +1,8 @@
 package com.niphyang.sudoku;
 
+import com.niphyang.utils.QQWingMain;
+import com.qqwing.QQWing;
+
 import java.util.Random;
 
 /**
@@ -57,32 +60,50 @@ public class SudokuSolver {
             for (int val : values) {
                 if (genFlag && rows[row][val] == false && cols[col][val] == false && boxes[box][val] == false) {
                     grid[row][col] = val;
-                    rows[row][val] = true;
-                    cols[col][val] = true;
-                    boxes[box][val] = true;
+                   // rows[row][val] = true;
+                  //  cols[col][val] = true;
+                   // boxes[box][val] = true;
                     generate(pos + 1);
-                    rows[row][val] = false;
-                    cols[col][val] = false;
-                    boxes[box][val] = false;
+                   // rows[row][val] = false;
+                   // cols[col][val] = false;
+                  //  boxes[box][val] = false;
                 }
             }
         }
     }
 
-    public int[][] getRandomGrid(int numberOfEmptyCells) {
+    public int[][] getRandomGrid(String difficultyString) {
         clearGrid();
         genFlag = true;
-        generate(0);
-        /* erase cells */
-        for (int i = 0; i < numberOfEmptyCells; ) {
-            int row = rnd.nextInt(9);
-            int col = rnd.nextInt(9);
-            if (grid[row][col] <= 9) {
+
+        QQWing ss = null;
+        while(ss == null || ss.countSolutions() != 1){
+            // Difficulty expected to be simple, easy, intermediate, expert, or any
+            ss = QQWingMain.generateSudoku(difficultyString);
+        }
+
+        String puzzleString = ss.getPuzzleString().replaceAll("\\.","0");
+        ss.solve();
+        String puzzleSolutionString = ss.getSolutionString().replaceAll("\\.","0");
+
+
+
+        for(int i=0;i<puzzleSolutionString.length()-1;i++){
+
+            int row = i / 9;
+            int col = i - row * 9;
+
+            grid[row][col] = Integer.parseInt(puzzleSolutionString.substring(i,i+1));
+
+            if(Integer.parseInt(puzzleString.substring(i,i+1)) == 0){
                 /* the 10-th bit mark the cell is empty*/
                 grid[row][col] |= 1024;
-                ++i;
             }
         }
+
+
+
+
         return grid;
     }
 

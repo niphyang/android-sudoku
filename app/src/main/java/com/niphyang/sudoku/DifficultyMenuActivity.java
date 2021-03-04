@@ -71,6 +71,7 @@ public class DifficultyMenuActivity extends AppCompatActivity {
         }
         Intent intent = new Intent(DifficultyMenuActivity.this, GameActivity.class);
         intent.putExtra("difficulty", selectedDifficulty);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         DifficultyMenuActivity.this.startActivity(intent);
     }
 }
