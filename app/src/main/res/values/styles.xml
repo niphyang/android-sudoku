@@ -14,9 +14,6 @@
     </style>
 
 
-
-    출처: https://commin.tistory.com/63 [Commin의 일상코딩]
-
     <style name="MyTutorialTheme" parent="android:Theme.Holo.Dialog.NoActionBar.MinWidth"></style>
 
     <style name="FullscreenTheme" parent="AppTheme">
