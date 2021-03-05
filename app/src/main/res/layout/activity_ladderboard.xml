@@ -8,17 +8,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#b2c793">
+        android:background="#3d455b">
 
-        <TextView
-            android:id="@+id/txtSelectedDifficulty"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/scrollView1"
-            android:layout_centerHorizontal="true"
-            android:layout_margin="20dp"
-            android:text="Current Difficulty"
-            android:textSize="50dp" />
 
         <TextView
             android:id="@+id/txtEasy"
@@ -65,10 +56,14 @@
 
         <ScrollView
             android:id="@+id/scrollView1"
+            android:layout_below="@id/txtEasy"
+            android:layout_marginTop="5dp"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:background="#3d455b">
+            android:background="#3d455b"
+
+            >
 
             <HorizontalScrollView
                 android:layout_width="fill_parent"
@@ -76,15 +71,15 @@
 
                 <RelativeLayout
                     android:id="@+id/RelativeLayout1"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:orientation="vertical">
 
                     <TableLayout
                         android:id="@+id/table_main"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_centerHorizontal="true" />
                 </RelativeLayout>
             </HorizontalScrollView>

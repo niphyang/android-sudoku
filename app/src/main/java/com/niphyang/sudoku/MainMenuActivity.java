@@ -39,6 +39,20 @@ public class MainMenuActivity extends Activity {
     @Override
     protected void onStart() {
         super.onStart();
+
+
+        float dp = AppConstant.convertDpToPixel(1, this);
+        int btnWidth = (int) (170 * dp);
+        int btnMargin = (int) (5 * dp);
+
+        RelativeLayout.LayoutParams btnResumeParams = new RelativeLayout.LayoutParams(btnWidth, ViewGroup.LayoutParams.WRAP_CONTENT);
+        btnResumeParams.addRule(RelativeLayout.BELOW, R.id.btnPlay);
+        btnResumeParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        btnResumeParams.setMargins(0, btnMargin, 0, btnMargin);
+        btnLadderboard.setLayoutParams(btnResumeParams);
+
+        /*
+
         DatabaseHelper DBHelper = DatabaseHelper.newInstance(this);
         SQLiteDatabase database = DBHelper.getWritableDatabase();
         Cursor cursor = database.rawQuery("SELECT * FROM GameState ORDER BY lastPlaying DESC LIMIT 1", null);
@@ -69,6 +83,9 @@ public class MainMenuActivity extends Activity {
             params.setMargins(0, btnMargin, 0, btnMargin);
             btnLadderboard.setLayoutParams(params);
         }
+
+
+         */
     }
 
     public void onClickLadderboard(View view) {

@@ -206,7 +206,7 @@ public class GameActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
 
         // setup action bar title
-        getSupportActionBar().setTitle(DIFFICULT_NAME[difficulty]);
+       // getSupportActionBar().setTitle(DIFFICULT_NAME[difficulty]);
 
         // hide status bar
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);

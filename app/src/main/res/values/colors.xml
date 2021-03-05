@@ -29,9 +29,14 @@
 
     <color name="MARKED_CELL_COLOR">#f9c147</color>
     <color name="black_overlay">#66000000</color>
-    <color name="EASY_COLOR">#419c44</color>
-    <color name="NORMAL_COLOR"> #0099cc</color>
-    <color name="HARD_COLOR">#ff8800</color>
-    <color name="EXTREME_COLOR">#ff1e00</color>
+
+
+    <color name="EASY_COLOR">#eee</color>
+    <color name="NORMAL_COLOR"> #eee</color>
+    <color name="HARD_COLOR">#eee</color>
+    <color name="EXTREME_COLOR">#eee</color>
+
+    <color name="RANK_BUTTON_NOSELECT_COLOR">#eee</color>
+    <color name="RANK_BUTTON_SELECT_COLOR">#3d455b</color>
 
 </resources>

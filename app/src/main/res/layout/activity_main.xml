@@ -69,11 +69,11 @@
             android:layout_marginBottom="5dp"
             android:background="@drawable/rounded_corner"
             android:onClick="onClickLadderboard"
-            android:text="Ladderboard"
+            android:text="RANK"
             android:textAllCaps="false"
             android:textColor="#F0F0F0"
             android:textSize="25dp"
-            android:visibility="invisible" />
+            android:visibility="visible" />
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>
 
