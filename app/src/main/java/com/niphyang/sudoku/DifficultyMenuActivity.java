@@ -1,9 +1,13 @@
 package com.niphyang.sudoku;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Display;
 import android.view.View;
@@ -44,7 +48,7 @@ public class DifficultyMenuActivity extends AppCompatActivity {
         btnExtreme.setWidth(width);
 
         /* set fullscreen */
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        //getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 
     public void onClickButton(View view) {
@@ -69,9 +73,66 @@ public class DifficultyMenuActivity extends AppCompatActivity {
                 selectedDifficulty = 0;
             }
         }
-        Intent intent = new Intent(DifficultyMenuActivity.this, GameActivity.class);
-        intent.putExtra("difficulty", selectedDifficulty);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        DifficultyMenuActivity.this.startActivity(intent);
+
+
+        final Intent intentContinue = new Intent(this, GameActivity.class);
+        intentContinue.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        String status, difficulty, elapsedSeconds, solutionString, gridString;
+        Cursor cursor;
+        try {
+            DatabaseHelper DBHelper = DatabaseHelper.newInstance(this);
+            SQLiteDatabase database = DBHelper.getWritableDatabase();
+            cursor = database.rawQuery("SELECT * FROM GameState WHERE difficulty = " + selectedDifficulty+ " ORDER BY lastPlaying DESC LIMIT 1", null);
+            if(cursor.getCount() > 0) {
+
+                cursor.moveToFirst();
+
+                status = cursor.getString(cursor.getColumnIndex("status"));
+                difficulty = cursor.getString(cursor.getColumnIndex("difficulty"));
+                elapsedSeconds = cursor.getString(cursor.getColumnIndex("elapsedSeconds"));
+                solutionString = cursor.getString(cursor.getColumnIndex("solutionString"));
+                gridString = cursor.getString(cursor.getColumnIndex("gridString"));
+
+                intentContinue.putExtra("status", Integer.parseInt(status));
+                intentContinue.putExtra("difficulty", Integer.parseInt(difficulty));
+                intentContinue.putExtra("elapsedSeconds", Integer.parseInt(elapsedSeconds));
+                intentContinue.putExtra("solutionString", solutionString);
+                intentContinue.putExtra("gridString", gridString);
+
+
+                AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+                dialog.setMessage("진행중인 게임이 있습니다.\n이어서 진행하시겠습니까?")
+                        .setPositiveButton("예", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                startActivity(intentContinue);
+                                finish();
+                            }
+                        })
+                        .setNegativeButton("아니오", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Intent intent = new Intent(DifficultyMenuActivity.this, GameActivity.class);
+                                intent.putExtra("difficulty", selectedDifficulty);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                DifficultyMenuActivity.this.startActivity(intent);
+                            }
+                        })
+                        .show();
+                // remove old data
+                database.execSQL("DELETE FROM GameState WHERE difficulty = " + selectedDifficulty);
+
+            }
+        } catch (Exception e) {
+            //Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+
+
+
+
+
+
+
     }
 }

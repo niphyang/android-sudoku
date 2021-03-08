@@ -1,10 +1,12 @@
 package com.niphyang.sudoku;
 
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
@@ -20,6 +22,8 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Scanner;
 import java.util.Stack;
 
@@ -63,6 +67,11 @@ public class GameActivity extends AppCompatActivity {
         }
 
         grid = new SudokuGrid(this, masks, solution);
+
+
+
+        //onClickSolve();
+
     }
 
     private void restoreGrid(String solutionString, String gridString) {
@@ -95,7 +104,7 @@ public class GameActivity extends AppCompatActivity {
             SQLiteDatabase database = DBHelper.getWritableDatabase();
             database.insert("GameState", null, state.getContentValues());
         } catch (Exception e) {
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -114,7 +123,7 @@ public class GameActivity extends AppCompatActivity {
         }
 
         wannaBack = true;
-        Toast.makeText(this, "Bấm 'BACK' lần nữa để quay lại menu chính", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "뒤로 버튼을 한번 더 누르시면 진행상항이 저장되고 메인 메뉴로 돌아갑니다.", Toast.LENGTH_SHORT).show();
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -209,10 +218,17 @@ public class GameActivity extends AppCompatActivity {
        // getSupportActionBar().setTitle(DIFFICULT_NAME[difficulty]);
 
         // hide status bar
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        //getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         Button btnSubmit = findViewById(R.id.btn_submit);
         btnSubmit.setTypeface(AppConstant.APP_FONT);
+
+        Button btnGiveup = findViewById(R.id.btn_giveup);
+        btnGiveup.setTypeface(AppConstant.APP_FONT);
+
+
+
+
 
         String solutionString = bundle.getString("solutionString", "none");
         String gridString = bundle.getString("gridString", "none");
@@ -236,47 +252,144 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
+    public void onClickGiveup(View view) {
+
+
+        final DatabaseHelper DBHelper = DatabaseHelper.newInstance(this);
+
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setMessage("포기하시면 진행상황이 삭제됩니다. 포기하시겠습니까?")
+                .setPositiveButton("예", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        try {
+                            SQLiteDatabase database = DBHelper.getWritableDatabase();
+                            database.execSQL("DELETE FROM GameState WHERE difficulty = " + difficulty);}
+                        catch (Exception e) {
+                            //Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+                        }finally {
+                            dialogInterface.cancel();
+                            finish();
+                        }
+                    }
+                })
+                .setNegativeButton("아니오", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+
+
+                    }
+                })
+                .show();
+
+    }
     public void onClickSubmit(View view) {
         if (!grid.isLegalGrid()) {
-            Toast.makeText(this, "Hãy hoàn thiện bảng", LENGTH_LONG).show();
+            //빈 칸이 있다
+            Toast.makeText(this, "빈 칸을 채워주세요", LENGTH_LONG).show();
             return;
         }
         if (solver.checkValidGrid(grid.getNumbers())) {
-            Toast.makeText(this, "Chúc mừng, đáp án chính xác", LENGTH_LONG).show();
             status = 0;
             if (status >= 0) {
-                AlertDialog.Builder dialog = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog);
-                dialog.setMessage("Bạn có muốn lưu kết quả trên bảng xếp hạng?")
-                        .setTitle("Thông báo\n")
-                        .setPositiveButton("Đồng ý", new DialogInterface.OnClickListener() {
+
+                final DatabaseHelper DBHelper = DatabaseHelper.newInstance(this);
+                AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+                dialog.setMessage("정답! 결과를 저장하시겠습니까?")
+                        .setPositiveButton("예", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 saveAchievement();
                             }
                         })
-                        .setNegativeButton("Từ chối", new DialogInterface.OnClickListener() {
+                        .setNegativeButton("아니오", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.cancel();
+
+                                try {
+                                    SQLiteDatabase database = DBHelper.getWritableDatabase();
+                                    database.execSQL("DELETE FROM GameState WHERE difficulty = " + difficulty);}
+                                catch (Exception e) {
+                                    //Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+                                }finally {
+                                    dialogInterface.cancel();
+                                    finish();
+                                }
+
                             }
                         })
                         .show();
                 timer.stop();
                 status = 1;
+
             }
             // set status to GAME_DONE
             status = -3;
         } else {
-            Toast.makeText(this, "Đáp án sai", LENGTH_LONG).show();
+            //정답 틀림
+
+
+
+            //AlertDialog : 틀린 부분을 확인하고 수정하려면 확인 (광고), 아니면 취소
+
+
+
+
+
+            int [][] nowGrid  = grid.getNumbers();
+            for(int i=0;i<nowGrid.length;i++){
+                for(int j=0;j<nowGrid[i].length;j++){
+                    if(grid.getCell(i,j).getNumber() != solution[i][j]){
+
+                        if(grid.getCell(i,j).getNumber() != (solution[i][j] & ~1024)){
+                            grid.getCell(i,j).setTextColor(Color.RED);
+                        }
+
+                    }
+                }
+            }
+
+
+           //Toast.makeText(this, "Đáp án sai", LENGTH_LONG).show();
         }
     }
 
     private void saveAchievement() {
-        Intent intent = new Intent(this, SaveAchievementActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        intent.putExtra("difficulty", difficulty);
-        intent.putExtra("elapsedSeconds", timer.getElapsedSeconds());
-        startActivity(intent);
+//        Intent intent = new Intent(this, SaveAchievementActivity.class);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+//        intent.putExtra("difficulty", difficulty);
+//        intent.putExtra("elapsedSeconds", timer.getElapsedSeconds());
+//        startActivity(intent);
+
+
+        try {
+            DatabaseHelper DBHelper = DatabaseHelper.newInstance(this);
+            SQLiteDatabase database = DBHelper.getWritableDatabase();
+
+            // insert into achievement table
+            SimpleDateFormat formatFactory = new SimpleDateFormat("dd/MM/yyyy");
+            ContentValues values = new ContentValues();
+            values.put("difficulty", difficulty);
+            values.put("date", formatFactory.format(Calendar.getInstance().getTime()));
+            values.put("elapsedSeconds", timer.getElapsedSeconds());
+
+            database.insert("achievement", null, values);
+            database.execSQL("DELETE FROM GameState WHERE difficulty = " + difficulty);
+
+
+        } catch (Exception e) {
+            //Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+        finally {
+            Intent intent = new Intent(this,LadderboardActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            intent.putExtra("difficulty", difficulty);
+            startActivity(intent);
+            finish();
+
+        }
+
     }
 
     public void onClickSolve() {
@@ -318,10 +431,18 @@ public class GameActivity extends AppCompatActivity {
         if(status < -1) return;
         Cell selectedCell = grid.getSelectedCell();
         if (number < 10) {
+
             // backup current selected cell state
             stack.push(selectedCell.getState());
-            // add a number to selected cell
-            selectedCell.addNumber(number);
+
+
+            if(!selectedCell.isMarked()){
+                selectedCell.setNumber(number);
+            }else{
+                // add a number to selected cell
+                selectedCell.addNumber(number);
+            }
+
         } else if (number == 10) {
             // mark selected cell
             selectedCell.setMarked(!selectedCell.isMarked());

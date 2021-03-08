@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#aaa</color>
 
-    <color name="colorPrimaryDark">#404769</color>
+    <color name="colorPrimaryDark">#888</color>
     <color name="colorAccent">#5a32c7</color>
     <!--here is my color-->
     <color name="EVEN_BOX_COLOR">#fff</color>

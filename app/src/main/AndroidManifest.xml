@@ -26,7 +26,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".LadderboardActivity"></activity>
-        <activity android:name=".SaveAchievementActivity"></activity>
     </application>
 
 </manifest>

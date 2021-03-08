@@ -38,7 +38,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             sqLiteDatabase.execSQL("CREATE TABLE GameState (id INTEGER PRIMARY KEY AUTOINCREMENT, difficulty INTEGER, status INTEGER, elapsedSeconds INTEGER, solutionString TEXT, gridString TEXT, lastPlaying DateTime DEFAULT (DateTime('now', 'localtime')))");
         }
         catch (SQLException e) {
-            Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 

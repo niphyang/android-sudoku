@@ -14,7 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class LadderboardActivity extends Activity {
-    private int difficulty = 4;
+    private int difficulty = 1;
     private int one; // a width unit
     private TextView txtEasy, txtNormal, txtHard, txtExtreme;
     private TableLayout table;
@@ -25,8 +25,10 @@ public class LadderboardActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ladderboard);
 
+
+        difficulty = getIntent().getIntExtra("difficulty", 1);
         // hide status bar
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        //getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 
         // reference variables
@@ -39,9 +41,7 @@ public class LadderboardActivity extends Activity {
         txtHard = findViewById(R.id.txtHard);
         txtExtreme = findViewById(R.id.txtExtreme);
 
-
         adjustDifficultyTextView();
-        txtExtreme.callOnClick();
     }
 
     void adjustDifficultyTextView() {
@@ -90,6 +90,8 @@ public class LadderboardActivity extends Activity {
         });
 
 
+        drawLadderboard();
+
 
     }
 
@@ -120,20 +122,16 @@ public class LadderboardActivity extends Activity {
         // draw new table
         TableRow header = new TableRow(this);
 
-        TextView rankHeader = new LadderboardCell(this, "Rank", one / 2);
+        TextView rankHeader = new LadderboardCell(this, "Rank", one );
         header.addView(rankHeader);
 
-        TextView nicknameHeader = new LadderboardCell(this, "Nickname", one);
-        header.addView(nicknameHeader);
 
-        TextView timeElapsedHeader = new LadderboardCell(this, "Time", one / 2);
+
+        TextView timeElapsedHeader = new LadderboardCell(this, "Time", one * 2);
         header.addView(timeElapsedHeader);
 
-        TextView dateHeader = new LadderboardCell(this, "Date", one);
+        TextView dateHeader = new LadderboardCell(this, "Date", one );
         header.addView(dateHeader);
-
-        TextView noteHeader = new LadderboardCell(this, "Note", one);
-        header.addView(noteHeader);
 
         table.addView(header);
 
@@ -154,18 +152,14 @@ public class LadderboardActivity extends Activity {
             String rank = "", nickname = "", time = "", date = "", note = "";
             if (cursor != null && !cursor.isAfterLast()) {
                 rank = String.valueOf(r);
-                nickname = cursor.getString(cursor.getColumnIndex("nickname"));
                 time = cursor.getString(cursor.getColumnIndex("elapsedSeconds"));
                 date = cursor.getString(cursor.getColumnIndex("date"));
-                note = cursor.getString(cursor.getColumnIndex("note"));
                 cursor.moveToNext();
             }
 
             TextView rankCell = new LadderboardCell(this, rank, one / 2);
             newRow.addView(rankCell);
 
-            TextView nicknameCell = new LadderboardCell(this, nickname, one);
-            newRow.addView(nicknameCell);
 
             String text = (time == "") ? time : Timer.getTimeFormat(Integer.parseInt(time));
             TextView timeCell = new LadderboardCell(this, text, one / 2);
@@ -174,8 +168,6 @@ public class LadderboardActivity extends Activity {
             TextView dateCell = new LadderboardCell(this, date, one);
             newRow.addView(dateCell);
 
-            TextView noteCell = new LadderboardCell(this, note, one);
-            newRow.addView(noteCell);
 
             table.addView(newRow);
         }

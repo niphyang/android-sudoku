@@ -20,14 +20,7 @@ public class LadderboardCell extends AppCompatTextView {
         setWidth(width);
         setTypeface(AppConstant.APP_FONT);
         
-        if(text.length() > 0) {
-            setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Toast.makeText(context, getText(),Toast.LENGTH_LONG).show();
-                }
-            });
-        }
+
     }
 
 }

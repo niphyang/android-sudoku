@@ -3,6 +3,8 @@ package com.niphyang.sudoku;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -53,10 +55,11 @@ public class Cell extends android.support.v7.widget.AppCompatTextView {
 
         if (highlightColor == R.color.HIGHLIGHT_LOCKED_CELL_COLOR) {
             isLocked = true;
-            setTextColor(Color.BLACK);
+            setTextColor(Color.GRAY);
+            setTypeface(getTypeface(), Typeface.BOLD_ITALIC);
         } else {
             isLocked = false;
-            setTextColor(Color.BLUE);
+            setTextColor(Color.BLACK);
         }
     }
 

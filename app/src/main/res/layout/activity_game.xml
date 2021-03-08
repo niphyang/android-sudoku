@@ -18,14 +18,7 @@
             android:layout_margin="20px"
             >
 
-            <ImageView
-                android:id="@+id/ic_timer"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_toLeftOf="@id/txt_elapsed_time"
-                android:src="@drawable/ic_timer"
-                android:layout_centerVertical="true"
-                />
+
 
             <TextView
                 android:id="@+id/txt_elapsed_time"
@@ -39,6 +32,20 @@
                 android:layout_centerHorizontal="true"
                 android:gravity="center"
                 android:layout_margin="10px"
+                />
+            <Button
+                android:id="@+id/btn_giveup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Give up"
+                android:textSize="18sp"
+                android:onClick="onClickGiveup"
+                android:backgroundTint="@color/SUBMIT_BUTTON_COLOR"
+                android:textColor="#FFFFFF"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:textAllCaps="false"
                 />
             <Button
                 android:id="@+id/btn_submit"

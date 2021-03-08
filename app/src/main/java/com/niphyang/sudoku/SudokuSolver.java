@@ -83,9 +83,9 @@ public class SudokuSolver {
         }
 
         String puzzleString = ss.getPuzzleString().replaceAll("\\.","0");
+
         ss.solve();
         String puzzleSolutionString = ss.getSolutionString().replaceAll("\\.","0");
-
 
 
         for(int i=0;i<puzzleSolutionString.length()-1;i++){
