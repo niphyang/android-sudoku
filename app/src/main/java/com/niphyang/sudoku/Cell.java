@@ -59,7 +59,7 @@ public class Cell extends android.support.v7.widget.AppCompatTextView {
             setTypeface(getTypeface(), Typeface.BOLD_ITALIC);
         } else {
             isLocked = false;
-            setTextColor(Color.BLACK);
+            setTextColor(Color.BLUE);
         }
     }
 

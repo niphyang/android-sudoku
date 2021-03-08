@@ -28,7 +28,7 @@ public class LadderboardActivity extends Activity {
 
         difficulty = getIntent().getIntExtra("difficulty", 1);
         // hide status bar
-        //getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 
         // reference variables
@@ -127,10 +127,10 @@ public class LadderboardActivity extends Activity {
 
 
 
-        TextView timeElapsedHeader = new LadderboardCell(this, "Time", one * 2);
+        TextView timeElapsedHeader = new LadderboardCell(this, "Time", one);
         header.addView(timeElapsedHeader);
 
-        TextView dateHeader = new LadderboardCell(this, "Date", one );
+        TextView dateHeader = new LadderboardCell(this, "Date (DD/MM/YYYY)", one * 2 );
         header.addView(dateHeader);
 
         table.addView(header);

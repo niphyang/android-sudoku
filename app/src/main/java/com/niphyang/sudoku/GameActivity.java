@@ -40,6 +40,8 @@ public class GameActivity extends AppCompatActivity {
     static private Numpad numpad;
     static private Stack<CellState> stack = new Stack<>();
 
+    boolean isDelete = false;
+
     SudokuSolver solver = new SudokuSolver();
 
 
@@ -67,8 +69,6 @@ public class GameActivity extends AppCompatActivity {
         }
 
         grid = new SudokuGrid(this, masks, solution);
-
-
 
         //onClickSolve();
 
@@ -110,7 +110,9 @@ public class GameActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        saveGame();
+        if(!isDelete){
+            saveGame();
+        }
         super.onPause();
     }
 
@@ -214,11 +216,9 @@ public class GameActivity extends AppCompatActivity {
         // lock screen orientation
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
 
-        // setup action bar title
-       // getSupportActionBar().setTitle(DIFFICULT_NAME[difficulty]);
 
         // hide status bar
-        //getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         Button btnSubmit = findViewById(R.id.btn_submit);
         btnSubmit.setTypeface(AppConstant.APP_FONT);
@@ -252,10 +252,43 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
+    public void onClickHint(View view) {
+
+        if(grid.getSelectedCell() == null){
+            Toast.makeText(this, "힌트를 얻을 셀을 선택한 후 힌트 버튼을 눌러주세요.", Toast.LENGTH_SHORT).show();
+        }else{
+
+            int selectIndex = grid.getSelectedCell().getIndex();
+            int row = selectIndex / 9;
+            int col = selectIndex % 9;
+
+            grid.getSelectedCell().setNumber(solution[row][col] & ~1024);
+
+            updateNumpad();
+        }
+    }
+    public void onClickBack(View view) {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setMessage("진행상항을 저장하고 메인 메뉴로 돌아가시겠습니까?")
+                .setPositiveButton("예", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                        dialogInterface.cancel();
+                        finish();
+                    }
+                })
+                .setNegativeButton("아니오", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                    }
+                })
+                .show();
+    }
     public void onClickGiveup(View view) {
 
 
-        final DatabaseHelper DBHelper = DatabaseHelper.newInstance(this);
 
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setMessage("포기하시면 진행상황이 삭제됩니다. 포기하시겠습니까?")
@@ -263,12 +296,19 @@ public class GameActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         try {
+                            DatabaseHelper DBHelper = DatabaseHelper.newInstance(getApplicationContext());
                             SQLiteDatabase database = DBHelper.getWritableDatabase();
-                            database.execSQL("DELETE FROM GameState WHERE difficulty = " + difficulty);}
-                        catch (Exception e) {
-                            //Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+
+                            database.execSQL("DELETE FROM GameState WHERE difficulty = '" + difficulty + "';");
+
+
+
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }finally {
                             dialogInterface.cancel();
+                            isDelete = true;
                             finish();
                         }
                     }
@@ -294,7 +334,6 @@ public class GameActivity extends AppCompatActivity {
             status = 0;
             if (status >= 0) {
 
-                final DatabaseHelper DBHelper = DatabaseHelper.newInstance(this);
                 AlertDialog.Builder dialog = new AlertDialog.Builder(this);
                 dialog.setMessage("정답! 결과를 저장하시겠습니까?")
                         .setPositiveButton("예", new DialogInterface.OnClickListener() {
@@ -308,9 +347,10 @@ public class GameActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialogInterface, int i) {
 
                                 try {
+                                    DatabaseHelper DBHelper = DatabaseHelper.newInstance(getApplicationContext());
                                     SQLiteDatabase database = DBHelper.getWritableDatabase();
-                                    database.execSQL("DELETE FROM GameState WHERE difficulty = " + difficulty);}
-                                catch (Exception e) {
+                                    database.execSQL("DELETE FROM GameState WHERE difficulty = '" + difficulty + "';");
+                                } catch (Exception e) {
                                     //Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
                                 }finally {
                                     dialogInterface.cancel();
@@ -375,13 +415,12 @@ public class GameActivity extends AppCompatActivity {
             values.put("elapsedSeconds", timer.getElapsedSeconds());
 
             database.insert("achievement", null, values);
-            database.execSQL("DELETE FROM GameState WHERE difficulty = " + difficulty);
+            database.execSQL("DELETE FROM GameState WHERE difficulty = '" + difficulty + "';");
 
 
         } catch (Exception e) {
             //Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
-        }
-        finally {
+        } finally {
             Intent intent = new Intent(this,LadderboardActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
             intent.putExtra("difficulty", difficulty);

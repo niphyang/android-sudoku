@@ -13,7 +13,7 @@ import android.widget.Toast;
 * */
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final String DATABASE_NAME = "sudoku.db";
+    private static final String DATABASE_NAME = "sudoku_yts.db";
     private static final int DATABASE_VERSION = 1;
 
     private static DatabaseHelper databaseInstance = null;
@@ -34,8 +34,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         try {
-            sqLiteDatabase.execSQL("CREATE TABLE Achievement (_id INTEGER PRIMARY KEY AUTOINCREMENT, nickname TEXT, elapsedSeconds INTEGER, difficulty TEXT, date TEXT, note TEXT)");
-            sqLiteDatabase.execSQL("CREATE TABLE GameState (id INTEGER PRIMARY KEY AUTOINCREMENT, difficulty INTEGER, status INTEGER, elapsedSeconds INTEGER, solutionString TEXT, gridString TEXT, lastPlaying DateTime DEFAULT (DateTime('now', 'localtime')))");
+            sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS Achievement (_id INTEGER PRIMARY KEY AUTOINCREMENT, nickname TEXT, elapsedSeconds INTEGER, difficulty TEXT, date TEXT, note TEXT)");
+            sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS GameState (id INTEGER PRIMARY KEY AUTOINCREMENT, difficulty INTEGER, status INTEGER, elapsedSeconds INTEGER, solutionString TEXT, gridString TEXT, lastPlaying DateTime DEFAULT (DateTime('now', 'localtime')))");
         }
         catch (SQLException e) {
             //Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();

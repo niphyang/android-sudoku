@@ -15,8 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_margin="20px"
-            >
+            android:layout_margin="20px">
 
 
 
@@ -33,26 +32,56 @@
                 android:gravity="center"
                 android:layout_margin="10px"
                 />
-            <Button
-                android:id="@+id/btn_giveup"
+
+
+
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Give up"
-                android:textSize="18sp"
-                android:onClick="onClickGiveup"
-                android:backgroundTint="@color/SUBMIT_BUTTON_COLOR"
-                android:textColor="#FFFFFF"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:gravity="center"
-                android:textAllCaps="false"
-                />
+                android:orientation="vertical">
+                <Button
+                    android:id="@+id/btn_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:backgroundTint="@color/SUBMIT_BUTTON_COLOR"
+                    android:gravity="center"
+                    android:onClick="onClickBack"
+                    android:text="Back"
+                    android:textAllCaps="false"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15sp"/>
+                <Button
+                    android:id="@+id/btn_giveup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:backgroundTint="@color/SUBMIT_BUTTON_COLOR"
+                    android:gravity="center"
+                    android:onClick="onClickGiveup"
+                    android:text="Give up"
+                    android:textAllCaps="false"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15sp"
+                    />
+            </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:orientation="vertical">
             <Button
                 android:id="@+id/btn_submit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Submit"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 android:onClick="onClickSubmit"
                 android:backgroundTint="@color/SUBMIT_BUTTON_COLOR"
                 android:textColor="#FFFFFF"
@@ -61,6 +90,22 @@
                 android:gravity="center"
                 android:textAllCaps="false"
                 />
+            <Button
+                android:id="@+id/btn_hint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hint"
+                android:textSize="15sp"
+                android:onClick="onClickHint"
+                android:backgroundTint="@color/SUBMIT_BUTTON_COLOR"
+                android:textColor="#FFFFFF"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:textAllCaps="false"
+                />
+
+        </LinearLayout>
         </RelativeLayout>
         <GridView
             android:id="@+id/grid_sudoku"

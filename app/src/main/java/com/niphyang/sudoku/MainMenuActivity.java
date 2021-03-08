@@ -24,7 +24,7 @@ public class MainMenuActivity extends Activity {
 
         Typeface appFont = Typeface.createFromAsset(getAssets(), getString(R.string.app_font));
         /* hide the status bar */
-        //getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         btnPlay = findViewById(R.id.btnPlay);
         btnPlay.setTypeface(appFont);
@@ -49,6 +49,7 @@ public class MainMenuActivity extends Activity {
         btnResumeParams.addRule(RelativeLayout.BELOW, R.id.btnPlay);
         btnResumeParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         btnResumeParams.setMargins(0, btnMargin, 0, btnMargin);
+        btnLadderboard.setTypeface(Typeface.createFromAsset(getAssets(), getString(R.string.app_font)));
         btnLadderboard.setLayoutParams(btnResumeParams);
 
         /*

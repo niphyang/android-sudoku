@@ -48,7 +48,7 @@ public class DifficultyMenuActivity extends AppCompatActivity {
         btnExtreme.setWidth(width);
 
         /* set fullscreen */
-        //getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 
     public void onClickButton(View view) {
@@ -73,7 +73,6 @@ public class DifficultyMenuActivity extends AppCompatActivity {
                 selectedDifficulty = 0;
             }
         }
-
 
         final Intent intentContinue = new Intent(this, GameActivity.class);
         intentContinue.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -117,12 +116,19 @@ public class DifficultyMenuActivity extends AppCompatActivity {
                                 intent.putExtra("difficulty", selectedDifficulty);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 DifficultyMenuActivity.this.startActivity(intent);
+                                finish();
                             }
                         })
                         .show();
                 // remove old data
-                database.execSQL("DELETE FROM GameState WHERE difficulty = " + selectedDifficulty);
+                database.execSQL("DELETE FROM GameState WHERE difficulty = '" + selectedDifficulty + "';");
 
+            }else{
+                Intent intent = new Intent(DifficultyMenuActivity.this, GameActivity.class);
+                intent.putExtra("difficulty", selectedDifficulty);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                DifficultyMenuActivity.this.startActivity(intent);
+                finish();
             }
         } catch (Exception e) {
             //Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
