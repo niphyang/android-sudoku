@@ -176,13 +176,13 @@
             android:layout_below="@+id/layout_top"
             android:layout_margin="20px"
             android:background="@color/GRID_BACKGROUND_COLOR"
-            android:horizontalSpacing="2dp"
+            android:horizontalSpacing="4dp"
             android:numColumns="3"
             android:paddingLeft="3dp"
             android:paddingTop="3dp"
             android:paddingRight="2dp"
             android:paddingBottom="3dp"
-            android:verticalSpacing="2dp"></GridView>
+            android:verticalSpacing="4dp"></GridView>
 
         <GridView
             android:id="@+id/grid_numpad"

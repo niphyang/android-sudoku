@@ -207,24 +207,25 @@ public class GameActivity extends AppCompatActivity {
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
             public void onInitializationComplete(InitializationStatus initializationStatus) {
+                //리워드 광고 1개 먼저 준비
+                rewardedAd[0] = createAndLoadRewardedAd();
+
+
+                //배너광고 로드
+                adView = findViewById(R.id.adView);
+                AdRequest adRequest = new AdRequest.Builder().build();
+                adView.loadAd(adRequest);
+
+
+                //나머지 리워드 광고 로드
+                for(int i=1;i<rewardedAd.length;i++){
+                    rewardedAd[i] = createAndLoadRewardedAd();
+                }
             }
         });
 
 
-        //리워드 광고 1개 먼저 준비
-        rewardedAd[0] = createAndLoadRewardedAd();
 
-
-        //배너광고 로드
-        adView = findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        adView.loadAd(adRequest);
-
-
-        //나머지 리워드 광고 로드
-        for(int i=1;i<rewardedAd.length;i++){
-            rewardedAd[i] = createAndLoadRewardedAd();
-        }
 
 
 
