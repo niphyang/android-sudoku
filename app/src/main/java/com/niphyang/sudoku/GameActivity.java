@@ -1,6 +1,7 @@
 package com.niphyang.sudoku;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,18 +10,30 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.text.Spannable;
 import android.text.Spanned;
 import android.text.style.RelativeSizeSpan;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
+
+import com.google.android.gms.ads.AdError;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.android.gms.ads.rewarded.RewardItem;
+import com.google.android.gms.ads.rewarded.RewardedAd;
+import com.google.android.gms.ads.rewarded.RewardedAdCallback;
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -50,6 +63,8 @@ public class GameActivity extends AppCompatActivity {
     private int difficulty;
     static private int status; // -3 game done | -2: auto solved | -1: auto fill | 0: playing | 1: player solved
     private Timer timer;
+
+
 
     private void generateGrid() {
         // generate a grid
@@ -134,35 +149,7 @@ public class GameActivity extends AppCompatActivity {
         }, 3000);
     }
 
-    @SuppressLint("ResourceType")
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_solve:
-                onClickSolve();
-                break;
-            case R.id.action_reset:
-                onClickReset();
-                break;
-            case R.id.action_autofill:
-                onClickAutoFill();
-                break;
-            case R.id.action_tutorial:
-                onClickTutorial();
-                break;
-            default:
-                break;
-        }
-
-        return true;
-    }
 
     private void onClickAutoFill() {
         if (status < -1) return;
@@ -203,11 +190,44 @@ public class GameActivity extends AppCompatActivity {
         updateNumpad();
     }
 
+    //애드몹 광고
+    private AdView adView = null;
+    private RewardedAd [] rewardedAd = new RewardedAd[5];
+    private int rewardedAdIdx = 0;
+
     @SuppressLint({"ResourceAsColor", "ClickableViewAccessibility"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+
+
+
+
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+
+
+        //리워드 광고 1개 먼저 준비
+        rewardedAd[0] = createAndLoadRewardedAd();
+
+
+        //배너광고 로드
+        adView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
+
+
+        //나머지 리워드 광고 로드
+        for(int i=1;i<rewardedAd.length;i++){
+            rewardedAd[i] = createAndLoadRewardedAd();
+        }
+
+
+
 
         Bundle bundle = getIntent().getExtras();
         difficulty = bundle.getInt("difficulty", 0);
@@ -218,13 +238,9 @@ public class GameActivity extends AppCompatActivity {
 
 
         // hide status bar
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        Button btnSubmit = findViewById(R.id.btn_submit);
-        btnSubmit.setTypeface(AppConstant.APP_FONT);
 
-        Button btnGiveup = findViewById(R.id.btn_giveup);
-        btnGiveup.setTypeface(AppConstant.APP_FONT);
 
 
 
@@ -243,6 +259,39 @@ public class GameActivity extends AppCompatActivity {
         int elapsedTime = bundle.getInt("elapsedSeconds", 0);
         timer = new Timer(this, elapsedTime);
         timer.start();
+
+
+
+
+
+
+
+
+
+
+    }
+
+    public RewardedAd createAndLoadRewardedAd() {
+
+
+        // TEST
+        // ca-app-pub-3940256099942544/5224354917
+
+        RewardedAd rewardedAd = new RewardedAd(this,
+                "ca-app-pub-2327476184552798/2721932269");
+        RewardedAdLoadCallback adLoadCallback = new RewardedAdLoadCallback() {
+            @Override
+            public void onRewardedAdLoaded() {
+                // Ad successfully loaded.
+            }
+
+            @Override
+            public void onRewardedAdFailedToLoad(LoadAdError adError) {
+                // Ad failed to load.
+            }
+        };
+        rewardedAd.loadAd(new AdRequest.Builder().build(), adLoadCallback);
+        return rewardedAd;
     }
 
     public static void updateNumpad() {
@@ -254,17 +303,75 @@ public class GameActivity extends AppCompatActivity {
 
     public void onClickHint(View view) {
 
-        if(grid.getSelectedCell() == null){
+
+        if(grid.getSelectedCell() == null || grid.getSelectedCell().isLocked()){
             Toast.makeText(this, "힌트를 얻을 셀을 선택한 후 힌트 버튼을 눌러주세요.", Toast.LENGTH_SHORT).show();
         }else{
 
-            int selectIndex = grid.getSelectedCell().getIndex();
-            int row = selectIndex / 9;
-            int col = selectIndex % 9;
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            dialog.setMessage("짧은 광고를 시청 후 선택된 셀의 정답을 표시하시겠습니까?")
+                    .setPositiveButton("예", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
 
-            grid.getSelectedCell().setNumber(solution[row][col] & ~1024);
 
-            updateNumpad();
+                            if (rewardedAd[rewardedAdIdx].isLoaded()) {
+                                Activity activityContext = GameActivity.this;
+                                RewardedAdCallback adCallback = new RewardedAdCallback() {
+                                    @Override
+                                    public void onRewardedAdOpened() {
+                                        // Ad opened.
+                                    }
+
+                                    @Override
+                                    public void onRewardedAdClosed() {
+                                        rewardedAd[rewardedAdIdx] = createAndLoadRewardedAd();
+                                    }
+
+                                    @Override
+                                    public void onUserEarnedReward(@NonNull RewardItem reward) {
+                                        // User earned reward.
+                                        int selectIndex = grid.getSelectedCell().getIndex();
+                                        int row = selectIndex / 9;
+                                        int col = selectIndex % 9;
+                                        grid.getSelectedCell().setNumber(solution[row][col] & ~1024);
+                                        updateNumpad();
+
+                                    }
+
+                                    @Override
+                                    public void onRewardedAdFailedToShow(AdError adError) {
+                                        Toast.makeText(getApplicationContext(), "리워드 광고를 불러오지 못했습니다. 잠시 후 다시 시도해주세요", Toast.LENGTH_SHORT).show();
+                                    }
+                                };
+                                rewardedAd[rewardedAdIdx].show(activityContext, adCallback);
+
+                                rewardedAdIdx++;
+                                if(rewardedAdIdx == rewardedAd.length){
+                                    rewardedAdIdx = 0;
+                                }
+
+                            } else {
+                                Toast.makeText(getApplicationContext(), "리워드 광고가 준비되지 않았습니다. 잠시 후 다시 시도해주세요", Toast.LENGTH_SHORT).show();
+                            }
+
+
+
+
+
+                        }
+                    })
+                    .setNegativeButton("아니오", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.cancel();
+                        }
+                    })
+                    .show();
+
+
+
+
         }
     }
     public void onClickBack(View view) {
@@ -325,7 +432,25 @@ public class GameActivity extends AppCompatActivity {
 
     }
     public void onClickSubmit(View view) {
-        if (!grid.isLegalGrid()) {
+
+        boolean isHaveEmpty = false;
+
+        for(int i=0;i<9;i++){
+            for(int j=0;j<9;j++){
+                if(grid.getCell(i,j).getNumber() == 0){
+                    isHaveEmpty = true;
+                    break;
+                }
+            }
+            if(isHaveEmpty){
+                break;
+            }
+        }
+
+
+
+
+        if (isHaveEmpty) {
             //빈 칸이 있다
             Toast.makeText(this, "빈 칸을 채워주세요", LENGTH_LONG).show();
             return;
@@ -371,25 +496,78 @@ public class GameActivity extends AppCompatActivity {
 
 
 
-            //AlertDialog : 틀린 부분을 확인하고 수정하려면 확인 (광고), 아니면 취소
+
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            dialog.setMessage("틀렸습니다. 수정 후 다시 제출해주세요. 짧은 광고를 시청 후 틀린 부분을 표시하시겠습니까?")
+                    .setPositiveButton("예", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int v) {
+
+
+                            if (rewardedAd[rewardedAdIdx].isLoaded()) {
+                                Activity activityContext = GameActivity.this;
+                                RewardedAdCallback adCallback = new RewardedAdCallback() {
+                                    @Override
+                                    public void onRewardedAdOpened() {
+                                        // Ad opened.
+                                    }
+
+                                    @Override
+                                    public void onRewardedAdClosed() {
+                                        rewardedAd[rewardedAdIdx] = createAndLoadRewardedAd();
+                                    }
+
+                                    @Override
+                                    public void onUserEarnedReward(@NonNull RewardItem reward) {
+                                        // User earned reward.
+                                        int [][] nowGrid  = grid.getNumbers();
+                                        for(int i=0;i<nowGrid.length;i++){
+                                            for(int j=0;j<nowGrid[i].length;j++){
+                                                if(grid.getCell(i,j).getNumber() != solution[i][j]){
+
+                                                    if(grid.getCell(i,j).getNumber() != (solution[i][j] & ~1024)){
+                                                        grid.getCell(i,j).setTextColor(Color.RED);
+                                                        updateNumpad();
+                                                    }
+
+                                                }
+                                            }
+                                        }
+
+                                    }
+
+                                    @Override
+                                    public void onRewardedAdFailedToShow(AdError adError) {
+                                        Toast.makeText(getApplicationContext(), "리워드 광고를 불러오지 못했습니다. 잠시 후 다시 시도해주세요", Toast.LENGTH_SHORT).show();
+                                    }
+                                };
+                                rewardedAd[rewardedAdIdx].show(activityContext, adCallback);
+
+                                rewardedAdIdx++;
+                                if(rewardedAdIdx == rewardedAd.length){
+                                    rewardedAdIdx = 0;
+                                }
+
+                            } else {
+                                Toast.makeText(getApplicationContext(), "리워드 광고가 준비되지 않았습니다. 잠시 후 다시 시도해주세요", Toast.LENGTH_SHORT).show();
+                            }
 
 
 
 
 
-            int [][] nowGrid  = grid.getNumbers();
-            for(int i=0;i<nowGrid.length;i++){
-                for(int j=0;j<nowGrid[i].length;j++){
-                    if(grid.getCell(i,j).getNumber() != solution[i][j]){
 
-                        if(grid.getCell(i,j).getNumber() != (solution[i][j] & ~1024)){
-                            grid.getCell(i,j).setTextColor(Color.RED);
+
                         }
+                    })
+                    .setNegativeButton("아니오", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
 
-                    }
-                }
-            }
 
+                        }
+                    })
+                    .show();
 
            //Toast.makeText(this, "Đáp án sai", LENGTH_LONG).show();
         }

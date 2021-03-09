@@ -3,7 +3,6 @@ package com.niphyang.sudoku;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -16,7 +15,7 @@ import java.util.Map;
  * Created by tuana on 14-03-2018.
  */
 @SuppressLint("ResourceAsColor")
-public class Cell extends android.support.v7.widget.AppCompatTextView {
+public class Cell extends androidx.appcompat.widget.AppCompatTextView {
     static public int CELL_DEFAULT_TEXT_SIZE = 18;
     static public int CELL_HEIGHT;
     static private final int[] indexOfNumber = {0, 0, 3, 6, 8, 11, 14, 16, 19, 22}; // in format cell string

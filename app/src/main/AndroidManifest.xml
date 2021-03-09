@@ -4,32 +4,36 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_laucher"
-        android:label="SUDOKU"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:screenOrientation="portrait"
         android:theme="@style/AppTheme">
-        <activity android:name=".DifficultyMenuActivity"
-            android:screenOrientation="portrait">
+
+        <!-- Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713 -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-2327476184552798~4961082792"/>
+
+
+        <activity android:name=".DifficultyMenuActivity">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainMenuActivity"
-            android:screenOrientation="portrait">
+        <activity android:name=".MainMenuActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".GameActivity"
-            android:screenOrientation="portrait">
+        <activity android:name=".GameActivity">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LadderboardActivity"
-            android:screenOrientation="portrait"></activity>
+        <activity android:name=".LadderboardActivity"></activity>
     </application>
 
 </manifest>

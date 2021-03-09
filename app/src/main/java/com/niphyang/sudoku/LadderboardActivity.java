@@ -28,7 +28,7 @@ public class LadderboardActivity extends Activity {
 
         difficulty = getIntent().getIntExtra("difficulty", 1);
         // hide status bar
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 
         // reference variables

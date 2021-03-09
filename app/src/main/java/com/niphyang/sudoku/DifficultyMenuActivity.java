@@ -7,11 +7,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.Display;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 
 public class DifficultyMenuActivity extends AppCompatActivity {
@@ -48,7 +47,7 @@ public class DifficultyMenuActivity extends AppCompatActivity {
         btnExtreme.setWidth(width);
 
         /* set fullscreen */
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 
     public void onClickButton(View view) {
@@ -112,6 +111,12 @@ public class DifficultyMenuActivity extends AppCompatActivity {
                         .setNegativeButton("아니오", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
+
+
+                                View progress = findViewById(R.id.base_progressBar);
+                                progress.setVisibility(View.VISIBLE);
+
+
                                 Intent intent = new Intent(DifficultyMenuActivity.this, GameActivity.class);
                                 intent.putExtra("difficulty", selectedDifficulty);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -124,6 +129,11 @@ public class DifficultyMenuActivity extends AppCompatActivity {
                 database.execSQL("DELETE FROM GameState WHERE difficulty = '" + selectedDifficulty + "';");
 
             }else{
+
+
+                View progress = findViewById(R.id.base_progressBar);
+                progress.setVisibility(View.VISIBLE);
+
                 Intent intent = new Intent(DifficultyMenuActivity.this, GameActivity.class);
                 intent.putExtra("difficulty", selectedDifficulty);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);

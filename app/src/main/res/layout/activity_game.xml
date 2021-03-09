@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,139 +9,209 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/GAME_BACKGROUND_COLOR"
-        >
-        <RelativeLayout
+        android:background="@color/GAME_BACKGROUND_COLOR">
+
+        <LinearLayout
             android:id="@+id/layout_top"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_margin="20px">
-
-
-
-            <TextView
-                android:id="@+id/txt_elapsed_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="00:00"
-                android:textColor="@color/colorPrimaryDark"
-                android:textSize="30dp"
-                android:textStyle="bold"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                android:gravity="center"
-                android:layout_margin="10px"
-                />
-
-
-
+            android:layout_margin="20px"
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                android:gravity="center"
-                android:orientation="vertical">
-                <Button
-                    android:id="@+id/btn_back"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:backgroundTint="@color/SUBMIT_BUTTON_COLOR"
-                    android:gravity="center"
-                    android:onClick="onClickBack"
-                    android:text="Back"
-                    android:textAllCaps="false"
-                    android:textColor="#FFFFFF"
-                    android:textSize="15sp"/>
-                <Button
-                    android:id="@+id/btn_giveup"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:backgroundTint="@color/SUBMIT_BUTTON_COLOR"
-                    android:gravity="center"
-                    android:onClick="onClickGiveup"
-                    android:text="Give up"
-                    android:textAllCaps="false"
-                    android:textColor="#FFFFFF"
-                    android:textSize="15sp"
-                    />
-            </LinearLayout>
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:gravity="center"
-            android:orientation="vertical">
-            <Button
-                android:id="@+id/btn_submit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Submit"
-                android:textSize="15sp"
-                android:onClick="onClickSubmit"
-                android:backgroundTint="@color/SUBMIT_BUTTON_COLOR"
-                android:textColor="#FFFFFF"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:gravity="center"
-                android:textAllCaps="false"
-                />
-            <Button
-                android:id="@+id/btn_hint"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Hint"
-                android:textSize="15sp"
-                android:onClick="onClickHint"
-                android:backgroundTint="@color/SUBMIT_BUTTON_COLOR"
-                android:textColor="#FFFFFF"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:gravity="center"
-                android:textAllCaps="false"
-                />
+                android:layout_weight="1"
+                android:gravity="center">
 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.6"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/btn_back"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+
+                        android:gravity="center"
+                        android:onClick="onClickBack"
+                        android:src="@drawable/baseline_keyboard_backspace_black_18dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Back"
+                        android:textColor="#000000"
+                        android:textStyle="bold"
+                        android:textSize="10sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.6"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/btn_giveup"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:gravity="center"
+                        android:onClick="onClickGiveup"
+                        android:src="@drawable/baseline_outlined_flag_black_18dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Give up"
+                        android:textColor="#000000"
+                        android:textStyle="bold"
+                        android:textSize="10sp" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/txt_elapsed_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_margin="10px"
+                android:gravity="center"
+                android:text="00:00"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="25dp"
+                android:textStyle="bold" />
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.6"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/btn_hint"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:gravity="center"
+                        android:onClick="onClickHint"
+
+                        android:src="@drawable/baseline_saved_search_black_18dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold"
+                        android:text="Hint"
+                        android:textSize="10sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.6"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/btn_submit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:gravity="center"
+                        android:onClick="onClickSubmit"
+
+                        android:src="@drawable/baseline_done_black_18dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold"
+                        android:text="Done"
+                        android:textSize="10sp" />
+
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
-        </RelativeLayout>
+
         <GridView
             android:id="@+id/grid_sudoku"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:numColumns="3"
-            android:verticalSpacing="2dp"
-            android:horizontalSpacing="2dp"
-            android:background="@color/GRID_BACKGROUND_COLOR"
-            android:layout_margin="20px"
-            android:paddingBottom="3dp"
-            android:paddingTop="3dp"
-            android:paddingLeft="3dp"
-            android:paddingRight="2dp"
             android:layout_below="@+id/layout_top"
-            >
-        </GridView>
+            android:layout_margin="20px"
+            android:background="@color/GRID_BACKGROUND_COLOR"
+            android:horizontalSpacing="2dp"
+            android:numColumns="3"
+            android:paddingLeft="3dp"
+            android:paddingTop="3dp"
+            android:paddingRight="2dp"
+            android:paddingBottom="3dp"
+            android:verticalSpacing="2dp"></GridView>
 
         <GridView
             android:id="@+id/grid_numpad"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/grid_sudoku"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="50dp"
             android:background="@color/GRID_BACKGROUND_COLOR"
             android:gravity="center"
             android:horizontalSpacing="2dp"
-            android:verticalSpacing="2dp"
-            android:layout_marginTop="10dp"
-            android:padding="3dp"
             android:numColumns="6"
-            android:layout_marginLeft="50dp"
-            android:layout_marginRight="50dp"
-            android:layout_below="@id/grid_sudoku"
-            android:visibility="invisible">
-        </GridView>
+            android:padding="3dp"
+            android:verticalSpacing="2dp"
+            android:visibility="invisible"></GridView>
 
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/adView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            ads:adSize="BANNER"
+            ads:adUnitId="ca-app-pub-2327476184552798/8997171351"
+            tools:ignore="MissingConstraints"></com.google.android.gms.ads.AdView>
+
+        <!--TEST-->
+        <!--ads:adUnitId="ca-app-pub-3940256099942544/6300978111"-->
 
     </RelativeLayout>
-</android.support.constraint.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

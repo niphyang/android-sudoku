@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Gradle: android-sudoku.generate_sudoku.generate_sudoku">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/generate_sudoku/generate_sudoku.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

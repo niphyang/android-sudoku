@@ -3,6 +3,7 @@ package com.niphyang.sudoku;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.widget.TextView;
@@ -15,7 +16,7 @@ import android.widget.TextView;
 public class NumpadButton extends TextView {
     final private int MARKED_COLOR = R.color.NUMPAD_BUTTON_MARKED_COLOR;
     final private int UNMARKED_COLOR = R.color.NUMPAD_BUTTON_UNMARKED_COLOR;
-    final private String[] buttonText = {"1", "2", "3", "4", "5", "MARK",  "6", "7", "8", "9", "CLEAR", "UNDO"};
+    final private String[] buttonText = {"1", "2", "3", "4", "5", "NOTE",  "6", "7", "8", "9", "CLEAR", "UNDO"};
     final private int[] index = {1, 2, 3, 4, 5, 10, 6, 7, 8, 9, 0, 11};
 
     private int position;
@@ -27,24 +28,27 @@ public class NumpadButton extends TextView {
         setBackgroundResource(R.color.NUMPAD_BUTTON_UNMARKED_COLOR);
         setText(buttonText[position]);
         setGravity(Gravity.CENTER);
-        setTypeface(AppConstant.APP_FONT);
         setHeight(Cell.CELL_HEIGHT);
 
         if(position == 10) {
             setTextSize(12);
             setTextColor(Color.BLACK);
+            setTypeface(AppConstant.APP_FONT);
         }
         else if(position == 5) {
             setTextSize(12);
             setTextColor(Color.BLACK);
+            setTypeface(AppConstant.APP_FONT);
         }
         else if(position == 11) {
             setTextSize(12);
             setTextColor(Color.BLACK);
+            setTypeface(AppConstant.APP_FONT);
         }
         else {
             setTextSize(20);
-            setTextColor(Color.BLUE);
+            setTextColor(Color.GRAY);
+            setTypeface(getTypeface(), Typeface.BOLD_ITALIC);
         }
     }
 

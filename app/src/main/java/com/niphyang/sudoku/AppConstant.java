@@ -21,7 +21,7 @@ public class AppConstant {
         SCREEN_SIZE = new Point(metrics.widthPixels, metrics.heightPixels);
         Cell.CELL_HEIGHT = (SCREEN_SIZE.x - 120) / 9;
         BOX_HEIGHT = Cell.CELL_HEIGHT * 3 + 2 * BOX_LINE_SPACING;
-        APP_FONT = Typeface.createFromAsset(context.getAssets(), context.getString(R.string.app_font));
+    //    APP_FONT = Typeface.createFromAsset(context.getAssets(), context.getString(R.string.app_font));
     }
 
     public static float convertDpToPixel (float dp, Context context){
