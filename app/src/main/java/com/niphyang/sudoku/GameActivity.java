@@ -64,7 +64,12 @@ public class GameActivity extends AppCompatActivity {
     static private int status; // -3 game done | -2: auto solved | -1: auto fill | 0: playing | 1: player solved
     private Timer timer;
 
-
+    // TEST
+    // ca-app-pub-3940256099942544/5224354917
+    // REAL
+    // ca-app-pub-2327476184552798/2721932269
+    private String rewardsAdUnitId = "ca-app-pub-2327476184552798/2721932269";
+    private String rewardsAdUnitIdDebug = "ca-app-pub-3940256099942544/5224354917";
 
     private void generateGrid() {
         // generate a grid
@@ -192,7 +197,7 @@ public class GameActivity extends AppCompatActivity {
 
     //애드몹 광고
     private AdView adView = null;
-    private RewardedAd [] rewardedAd = new RewardedAd[5];
+    private RewardedAd [] rewardedAdArr = new RewardedAd[5];
     private int rewardedAdIdx = 0;
 
     @SuppressLint({"ResourceAsColor", "ClickableViewAccessibility"})
@@ -207,9 +212,9 @@ public class GameActivity extends AppCompatActivity {
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
             public void onInitializationComplete(InitializationStatus initializationStatus) {
-                //리워드 광고 1개 먼저 준비
-                rewardedAd[0] = createAndLoadRewardedAd();
 
+                //리워드 광고 1개 먼저 준비
+                rewardedAdArr[0] = createAndLoadRewardedAd();
 
                 //배너광고 로드
                 adView = findViewById(R.id.adView);
@@ -217,10 +222,10 @@ public class GameActivity extends AppCompatActivity {
                 adView.loadAd(adRequest);
 
 
-                //나머지 리워드 광고 로드
-                for(int i=1;i<rewardedAd.length;i++){
-                    rewardedAd[i] = createAndLoadRewardedAd();
+                for(int i=1;i<rewardedAdArr.length;i++){
+                    rewardedAdArr[i] = createAndLoadRewardedAd();
                 }
+
             }
         });
 
@@ -262,24 +267,14 @@ public class GameActivity extends AppCompatActivity {
         timer.start();
 
 
-
-
-
-
-
-
-
-
     }
 
     public RewardedAd createAndLoadRewardedAd() {
 
+       //rewardsAdUnitIdDebug
 
-        // TEST
-        // ca-app-pub-3940256099942544/5224354917
 
-        RewardedAd rewardedAd = new RewardedAd(this,
-                "ca-app-pub-2327476184552798/2721932269");
+        final RewardedAd rewardedAd = new RewardedAd(this,rewardsAdUnitId);
         RewardedAdLoadCallback adLoadCallback = new RewardedAdLoadCallback() {
             @Override
             public void onRewardedAdLoaded() {
@@ -288,7 +283,8 @@ public class GameActivity extends AppCompatActivity {
 
             @Override
             public void onRewardedAdFailedToLoad(LoadAdError adError) {
-                // Ad failed to load.
+                // Ad Fail loaded
+
             }
         };
         rewardedAd.loadAd(new AdRequest.Builder().build(), adLoadCallback);
@@ -316,7 +312,7 @@ public class GameActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialogInterface, int i) {
 
 
-                            if (rewardedAd[rewardedAdIdx].isLoaded()) {
+                            if (rewardedAdArr[rewardedAdIdx].isLoaded()) {
                                 Activity activityContext = GameActivity.this;
                                 RewardedAdCallback adCallback = new RewardedAdCallback() {
                                     @Override
@@ -326,7 +322,7 @@ public class GameActivity extends AppCompatActivity {
 
                                     @Override
                                     public void onRewardedAdClosed() {
-                                        rewardedAd[rewardedAdIdx] = createAndLoadRewardedAd();
+                                        rewardedAdArr[rewardedAdIdx] = createAndLoadRewardedAd();
                                     }
 
                                     @Override
@@ -345,10 +341,10 @@ public class GameActivity extends AppCompatActivity {
                                         Toast.makeText(getApplicationContext(), "리워드 광고를 불러오지 못했습니다. 잠시 후 다시 시도해주세요", Toast.LENGTH_SHORT).show();
                                     }
                                 };
-                                rewardedAd[rewardedAdIdx].show(activityContext, adCallback);
+                                rewardedAdArr[rewardedAdIdx].show(activityContext, adCallback);
 
                                 rewardedAdIdx++;
-                                if(rewardedAdIdx == rewardedAd.length){
+                                if(rewardedAdIdx == rewardedAdArr.length){
                                     rewardedAdIdx = 0;
                                 }
 
@@ -505,7 +501,7 @@ public class GameActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialogInterface, int v) {
 
 
-                            if (rewardedAd[rewardedAdIdx].isLoaded()) {
+                            if (rewardedAdArr[rewardedAdIdx].isLoaded()) {
                                 Activity activityContext = GameActivity.this;
                                 RewardedAdCallback adCallback = new RewardedAdCallback() {
                                     @Override
@@ -515,7 +511,7 @@ public class GameActivity extends AppCompatActivity {
 
                                     @Override
                                     public void onRewardedAdClosed() {
-                                        rewardedAd[rewardedAdIdx] = createAndLoadRewardedAd();
+                                        rewardedAdArr[rewardedAdIdx] = createAndLoadRewardedAd();
                                     }
 
                                     @Override
@@ -542,10 +538,10 @@ public class GameActivity extends AppCompatActivity {
                                         Toast.makeText(getApplicationContext(), "리워드 광고를 불러오지 못했습니다. 잠시 후 다시 시도해주세요", Toast.LENGTH_SHORT).show();
                                     }
                                 };
-                                rewardedAd[rewardedAdIdx].show(activityContext, adCallback);
+                                rewardedAdArr[rewardedAdIdx].show(activityContext, adCallback);
 
                                 rewardedAdIdx++;
-                                if(rewardedAdIdx == rewardedAd.length){
+                                if(rewardedAdIdx == rewardedAdArr.length){
                                     rewardedAdIdx = 0;
                                 }
 

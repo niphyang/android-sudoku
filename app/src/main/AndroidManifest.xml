@@ -11,7 +11,8 @@
         android:screenOrientation="portrait"
         android:theme="@style/AppTheme">
 
-        <!-- Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713 -->
+        <!-- TEST AdMob app ID: ca-app-pub-3940256099942544~3347511713 -->
+        <!-- TEST AdMob app ID: ca-app-pub-2327476184552798~4961082792 -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-2327476184552798~4961082792"/>
