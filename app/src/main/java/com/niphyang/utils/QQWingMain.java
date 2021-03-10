@@ -127,7 +127,7 @@ public class QQWingMain {
 					// Bail out if it didn't meet the difficulty
 					// standards for generation
 					if (opts.action == Action.GENERATE) {
-						if (opts.difficulty != Difficulty.UNKNOWN && opts.difficulty != ss.getDifficulty()) {
+						if (opts.difficulty != Difficulty.UNKNOWN && opts.difficulty != getDifficulty(ss)) {
 							havePuzzle = false;
 							// check if other threads have
 							// finished the job
@@ -207,7 +207,7 @@ public class QQWingMain {
 						int boxReductionCount = ss.getBoxLineReductionCount();
 						int guessCount = ss.getGuessCount();
 						int backtrackCount = ss.getBacktrackCount();
-						String difficultyString = ss.getDifficultyAsString();
+						String difficultyString = getDifficultyAsString(ss);
 						if (opts.printStyle == PrintStyle.CSV) {
 							output.append(givenCount).append(",").append(singleCount).append(",")
 									.append(hiddenSingleCount).append(",").append(nakedPairCount).append(",")
@@ -230,12 +230,13 @@ public class QQWingMain {
 					}
 				}
 				if (output.length() > 0) {
-					
 
-					output.append(ss.getDifficultyAsString()).append(",");
-					
-				
-					
+
+					output.append(getDifficultyAsString(ss)).append(",");
+
+					if(ss.countSolutions() != 1) {
+						ss = generateSudoku(diff);
+					}
 					
 					return ss;
 					//return output.toString();
@@ -319,6 +320,26 @@ public class QQWingMain {
 			}
 			return true;
 		}
+	}
+	public static Difficulty getDifficulty(QQWing ss) {
+		if (ss.getGuessCount() > 4) return Difficulty.EXPERT;
+
+		if(ss.getGuessCount() > 0) return Difficulty.INTERMEDIATE;
+
+		if (ss.getBoxLineReductionCount()
+				+ ss.getPointingPairTripleCount()
+				+ ss.getHiddenPairCount()
+				+ ss.getNakedPairCount() > 2) return Difficulty.EASY;
+
+
+		if (ss.getHiddenSingleCount() > 0) return Difficulty.SIMPLE;
+
+		if (ss.getSingleCount() > 0) return Difficulty.SIMPLE;
+
+		return Difficulty.UNKNOWN;
+	}
+	public static String getDifficultyAsString(QQWing ss) {
+		return getDifficulty(ss).getName();
 	}
 
 

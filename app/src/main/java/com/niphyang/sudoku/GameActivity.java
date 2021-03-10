@@ -69,7 +69,6 @@ public class GameActivity extends AppCompatActivity {
     // REAL
     // ca-app-pub-2327476184552798/2721932269
     private String rewardsAdUnitId = "ca-app-pub-2327476184552798/2721932269";
-    private String rewardsAdUnitIdDebug = "ca-app-pub-3940256099942544/5224354917";
 
     private void generateGrid() {
         // generate a grid
@@ -240,7 +239,7 @@ public class GameActivity extends AppCompatActivity {
         status = bundle.getInt("status", 0);
 
         // lock screen orientation
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+       // setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
 
 
         // hide status bar
@@ -270,8 +269,6 @@ public class GameActivity extends AppCompatActivity {
     }
 
     public RewardedAd createAndLoadRewardedAd() {
-
-       //rewardsAdUnitIdDebug
 
 
         final RewardedAd rewardedAd = new RewardedAd(this,rewardsAdUnitId);

@@ -124,8 +124,14 @@ public class Cell extends androidx.appcompat.widget.AppCompatTextView {
                         format[indexOfNumber[x]] = ' ';
                     }
                 }
+
                 setTextSize(CELL_DEFAULT_TEXT_SIZE / 2);
+                setBackgroundResource(R.color.MARKED_CELL_COLOR);
                 setText(String.valueOf(format));
+
+                this.setMarked(true);
+
+
             } else {
                 setTextSize(CELL_DEFAULT_TEXT_SIZE);
                 setText(String.valueOf(maskToNumber.get(mask)));

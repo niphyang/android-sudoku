@@ -33,6 +33,7 @@ public class SudokuGrid {
 
                 mCells[row][col] = new Cell(context.getApplicationContext(), row * 9 + col, highlightColor, defaultColor);
                 mCells[row][col].setMask(masks[row][col]);
+
             }
         }
 
