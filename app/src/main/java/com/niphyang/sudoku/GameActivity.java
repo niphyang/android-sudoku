@@ -19,6 +19,7 @@ import android.text.Spanned;
 import android.text.style.RelativeSizeSpan;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -28,6 +29,7 @@ import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.RequestConfiguration;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.gms.ads.rewarded.RewardItem;
@@ -36,6 +38,7 @@ import com.google.android.gms.ads.rewarded.RewardedAdCallback;
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Scanner;
 import java.util.Stack;
@@ -54,6 +57,7 @@ public class GameActivity extends AppCompatActivity {
     static private Stack<CellState> stack = new Stack<>();
 
     boolean isDelete = false;
+    boolean isPause = false;
 
     SudokuSolver solver = new SudokuSolver();
 
@@ -67,8 +71,18 @@ public class GameActivity extends AppCompatActivity {
     // TEST
     // ca-app-pub-3940256099942544/5224354917
     // REAL
-    // ca-app-pub-2327476184552798/2721932269
-    private String rewardsAdUnitId = "ca-app-pub-2327476184552798/2721932269";
+    // "ca-app-pub-2327476184552798/2721932269"
+    // , "ca-app-pub-2327476184552798/4169194545"
+    // , "ca-app-pub-2327476184552798/5733557653"
+    // , "ca-app-pub-2327476184552798/7467465246"
+    // , "ca-app-pub-2327476184552798/6154383572"
+
+
+    private String [] rewardsAdUnitIdArr = { "ca-app-pub-2327476184552798/2721932269"
+            , "ca-app-pub-2327476184552798/4169194545"
+            , "ca-app-pub-2327476184552798/5733557653"
+            , "ca-app-pub-2327476184552798/7467465246"
+            , "ca-app-pub-2327476184552798/6154383572"};
 
     private void generateGrid() {
         // generate a grid
@@ -131,8 +145,23 @@ public class GameActivity extends AppCompatActivity {
     protected void onPause() {
         if(!isDelete){
             saveGame();
+            if(!isPause){
+                isPause = true;
+                timer.stop();
+            }
         }
         super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+
+        if(isPause){
+            timer.start();
+            isPause = false;
+        }
+
+        super.onResume();
     }
 
     boolean wannaBack = false;
@@ -206,6 +235,7 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game);
 
 
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
 
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
@@ -213,7 +243,7 @@ public class GameActivity extends AppCompatActivity {
             public void onInitializationComplete(InitializationStatus initializationStatus) {
 
                 //리워드 광고 1개 먼저 준비
-                rewardedAdArr[0] = createAndLoadRewardedAd();
+                rewardedAdArr[0] = createAndLoadRewardedAd(0);
 
                 //배너광고 로드
                 adView = findViewById(R.id.adView);
@@ -222,7 +252,7 @@ public class GameActivity extends AppCompatActivity {
 
 
                 for(int i=1;i<rewardedAdArr.length;i++){
-                    rewardedAdArr[i] = createAndLoadRewardedAd();
+                    rewardedAdArr[i] = createAndLoadRewardedAd(i);
                 }
 
             }
@@ -268,10 +298,10 @@ public class GameActivity extends AppCompatActivity {
 
     }
 
-    public RewardedAd createAndLoadRewardedAd() {
+    public RewardedAd createAndLoadRewardedAd(int idx) {
 
 
-        final RewardedAd rewardedAd = new RewardedAd(this,rewardsAdUnitId);
+        final RewardedAd rewardedAd = new RewardedAd(this,rewardsAdUnitIdArr[idx]);
         RewardedAdLoadCallback adLoadCallback = new RewardedAdLoadCallback() {
             @Override
             public void onRewardedAdLoaded() {
@@ -319,7 +349,7 @@ public class GameActivity extends AppCompatActivity {
 
                                     @Override
                                     public void onRewardedAdClosed() {
-                                        rewardedAdArr[rewardedAdIdx] = createAndLoadRewardedAd();
+                                        rewardedAdArr[rewardedAdIdx] = createAndLoadRewardedAd(rewardedAdIdx);
                                     }
 
                                     @Override
@@ -508,7 +538,7 @@ public class GameActivity extends AppCompatActivity {
 
                                     @Override
                                     public void onRewardedAdClosed() {
-                                        rewardedAdArr[rewardedAdIdx] = createAndLoadRewardedAd();
+                                        rewardedAdArr[rewardedAdIdx] = createAndLoadRewardedAd(rewardedAdIdx);
                                     }
 
                                     @Override
