@@ -225,7 +225,7 @@ public class GameActivity extends AppCompatActivity {
 
     //애드몹 광고
     private AdView adView = null;
-    private RewardedAd [] rewardedAdArr = new RewardedAd[5];
+    private RewardedAd [] rewardedAdArr = new RewardedAd[rewardsAdUnitIdArr.length];
     private int rewardedAdIdx = 0;
 
     @SuppressLint({"ResourceAsColor", "ClickableViewAccessibility"})
