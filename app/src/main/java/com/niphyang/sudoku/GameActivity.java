@@ -69,15 +69,15 @@ public class GameActivity extends AppCompatActivity {
     private Timer timer;
 
     // TEST
-    // ca-app-pub-3940256099942544/5224354917
+//    private String [] rewardsAdUnitIdArr = {
+//            "ca-app-pub-3940256099942544/5224354917"
+//            ,"ca-app-pub-3940256099942544/5224354917"
+//            ,"ca-app-pub-3940256099942544/5224354917"
+//            ,"ca-app-pub-3940256099942544/5224354917"
+//            ,"ca-app-pub-3940256099942544/5224354917"
+//    };
+
     // REAL
-    // "ca-app-pub-2327476184552798/2721932269"
-    // , "ca-app-pub-2327476184552798/4169194545"
-    // , "ca-app-pub-2327476184552798/5733557653"
-    // , "ca-app-pub-2327476184552798/7467465246"
-    // , "ca-app-pub-2327476184552798/6154383572"
-
-
     private String [] rewardsAdUnitIdArr = { "ca-app-pub-2327476184552798/2721932269"
             , "ca-app-pub-2327476184552798/4169194545"
             , "ca-app-pub-2327476184552798/5733557653"
