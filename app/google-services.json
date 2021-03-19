@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "663552264328",
+    "project_id": "sudoku-1a5f6",
+    "storage_bucket": "sudoku-1a5f6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:663552264328:android:e5974e702f86e2a318f73d",
+        "android_client_info": {
+          "package_name": "com.niphyang.sudoku"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "663552264328-86h17tscc32nrnddvopj76lop2s8g66k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFZA1IvJLV0-OpfjR6spjPcEFzW1CsvuY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "663552264328-86h17tscc32nrnddvopj76lop2s8g66k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      },
+      "admob_app_id": "ca-app-pub-2327476184552798~4961082792"
+    }
+  ],
+  "configuration_version": "1"
+}
