@@ -359,6 +359,8 @@ public class GameActivity extends AppCompatActivity {
                                         int row = selectIndex / 9;
                                         int col = selectIndex % 9;
                                         grid.getSelectedCell().setNumber(solution[row][col] & ~1024);
+
+                                        timer.setHintPenalty();
                                         updateNumpad();
 
                                     }

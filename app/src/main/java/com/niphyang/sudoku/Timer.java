@@ -18,6 +18,9 @@ public class Timer {
         this.elapsedTime = elapsedTime;
         init();
     }
+    public void setHintPenalty(){
+        elapsedTime += 60;
+    }
     public void start () {
         runnable.run();
     }
