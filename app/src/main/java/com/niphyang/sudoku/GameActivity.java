@@ -240,6 +240,7 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game);
 
 
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
 
