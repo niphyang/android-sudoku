@@ -9,6 +9,8 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.widget.Button;
@@ -75,7 +77,7 @@ public class DifficultyMenuActivity extends AppCompatActivity {
 
         final Intent intentContinue = new Intent(this, GameActivity.class);
         intentContinue.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        String status, difficulty, elapsedSeconds, solutionString, gridString;
+        String status, difficulty, elapsedSeconds, solutionString, gridString, hintCnt;
         Cursor cursor;
         try {
             DatabaseHelper DBHelper = DatabaseHelper.newInstance(this);
@@ -90,12 +92,14 @@ public class DifficultyMenuActivity extends AppCompatActivity {
                 elapsedSeconds = cursor.getString(cursor.getColumnIndex("elapsedSeconds"));
                 solutionString = cursor.getString(cursor.getColumnIndex("solutionString"));
                 gridString = cursor.getString(cursor.getColumnIndex("gridString"));
+                hintCnt = cursor.getString(cursor.getColumnIndex("hintCnt"));
 
                 intentContinue.putExtra("status", Integer.parseInt(status));
                 intentContinue.putExtra("difficulty", Integer.parseInt(difficulty));
                 intentContinue.putExtra("elapsedSeconds", Integer.parseInt(elapsedSeconds));
                 intentContinue.putExtra("solutionString", solutionString);
                 intentContinue.putExtra("gridString", gridString);
+                intentContinue.putExtra("hintCnt", Integer.parseInt(hintCnt));
 
 
                 AlertDialog.Builder dialog = new AlertDialog.Builder(this);

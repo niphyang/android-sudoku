@@ -122,16 +122,17 @@ public class LadderboardActivity extends Activity {
         // draw new table
         TableRow header = new TableRow(this);
 
-        TextView rankHeader = new LadderboardCell(this, "Rank", one );
+        TextView rankHeader = new LadderboardCell(this, "Rank", one / 2);
         header.addView(rankHeader);
 
-
-
-        TextView timeElapsedHeader = new LadderboardCell(this, "Time", one);
+        TextView timeElapsedHeader = new LadderboardCell(this, "Time", (int)((double) one * 1.5));
         header.addView(timeElapsedHeader);
 
-        TextView dateHeader = new LadderboardCell(this, "Date (DD/MM/YYYY)", one * 2 );
+        TextView dateHeader = new LadderboardCell(this, "Date (DD/MM/YYYY)", (int)((double) one * 1.5) );
         header.addView(dateHeader);
+
+        TextView hintHeader = new LadderboardCell(this, "Hint", one / 2);
+        header.addView(hintHeader);
 
         table.addView(header);
 
@@ -149,11 +150,12 @@ public class LadderboardActivity extends Activity {
 
         for (int r = 1; r <= 10; ++r) {
             TableRow newRow = new TableRow(this);
-            String rank = "", nickname = "", time = "", date = "", note = "";
+            String rank = "", nickname = "", time = "", date = "", note = "", hint = "";
             if (cursor != null && !cursor.isAfterLast()) {
                 rank = String.valueOf(r);
                 time = cursor.getString(cursor.getColumnIndex("elapsedSeconds"));
                 date = cursor.getString(cursor.getColumnIndex("date"));
+                hint = cursor.getString(cursor.getColumnIndex("hintCnt"));
                 cursor.moveToNext();
             }
 
@@ -162,11 +164,14 @@ public class LadderboardActivity extends Activity {
 
 
             String text = (time == "") ? time : Timer.getTimeFormat(Integer.parseInt(time));
-            TextView timeCell = new LadderboardCell(this, text, one / 2);
+            TextView timeCell = new LadderboardCell(this, text, (int)((double) one * 1.5));
             newRow.addView(timeCell);
 
-            TextView dateCell = new LadderboardCell(this, date, one);
+            TextView dateCell = new LadderboardCell(this, date, (int)((double) one * 1.5));
             newRow.addView(dateCell);
+
+            TextView hintCell = new LadderboardCell(this, hint, one / 2);
+            newRow.addView(hintCell);
 
 
             table.addView(newRow);

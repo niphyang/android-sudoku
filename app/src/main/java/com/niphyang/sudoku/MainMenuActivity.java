@@ -104,7 +104,7 @@ public class MainMenuActivity extends Activity {
     public void onClickResume(View view) {
         Intent intent = new Intent(this, GameActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        String status, difficulty, elapsedSeconds, solutionString, gridString;
+        String status, difficulty, elapsedSeconds, solutionString, gridString, hintCnt;
         Cursor cursor;
         try {
             DatabaseHelper DBHelper = DatabaseHelper.newInstance(this);
@@ -118,12 +118,14 @@ public class MainMenuActivity extends Activity {
                 elapsedSeconds = cursor.getString(cursor.getColumnIndex("elapsedSeconds"));
                 solutionString = cursor.getString(cursor.getColumnIndex("solutionString"));
                 gridString = cursor.getString(cursor.getColumnIndex("gridString"));
+                hintCnt = cursor.getString(cursor.getColumnIndex("hintCnt"));
 
                 intent.putExtra("status", Integer.parseInt(status));
                 intent.putExtra("difficulty", Integer.parseInt(difficulty));
                 intent.putExtra("elapsedSeconds", Integer.parseInt(elapsedSeconds));
                 intent.putExtra("solutionString", solutionString);
                 intent.putExtra("gridString", gridString);
+                intent.putExtra("hintCnt", hintCnt);
 
                 // remove old data
                 database.execSQL("DELETE FROM GameState WHERE 1");

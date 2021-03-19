@@ -67,6 +67,7 @@ public class GameActivity extends AppCompatActivity {
     private int difficulty;
     static private int status; // -3 game done | -2: auto solved | -1: auto fill | 0: playing | 1: player solved
     private Timer timer;
+    private int hintCnt;
 
     // TEST
 //    private String [] rewardsAdUnitIdArr = {
@@ -103,7 +104,9 @@ public class GameActivity extends AppCompatActivity {
 
         grid = new SudokuGrid(this, masks, solution);
 
-        //onClickSolve();
+        //정답 채우기
+        //grid.showSolution();
+
 
     }
 
@@ -131,7 +134,9 @@ public class GameActivity extends AppCompatActivity {
     private void saveGame() {
         if (status < -1) return;
         int[][] currentMask = grid.getCurrentMasks();
-        GameState state = new GameState(status, difficulty, timer.getElapsedSeconds(), solution, currentMask);
+
+
+        GameState state = new GameState(status, difficulty, timer.getElapsedSeconds(), solution, currentMask, hintCnt);
         try {
             DatabaseHelper DBHelper = DatabaseHelper.newInstance(this);
             SQLiteDatabase database = DBHelper.getWritableDatabase();
@@ -267,6 +272,7 @@ public class GameActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         difficulty = bundle.getInt("difficulty", 0);
         status = bundle.getInt("status", 0);
+        hintCnt = bundle.getInt("hintCnt", 0);
 
         // lock screen orientation
        // setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
@@ -359,8 +365,11 @@ public class GameActivity extends AppCompatActivity {
                                         int row = selectIndex / 9;
                                         int col = selectIndex % 9;
                                         grid.getSelectedCell().setNumber(solution[row][col] & ~1024);
-
                                         timer.setHintPenalty();
+
+                                        hintCnt++;
+
+
                                         updateNumpad();
 
                                     }
@@ -390,6 +399,7 @@ public class GameActivity extends AppCompatActivity {
                     .setNegativeButton("아니오", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
+
                             dialogInterface.cancel();
                         }
                     })
@@ -486,28 +496,11 @@ public class GameActivity extends AppCompatActivity {
             if (status >= 0) {
 
                 AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-                dialog.setMessage("정답! 결과를 저장하시겠습니까?")
-                        .setPositiveButton("예", new DialogInterface.OnClickListener() {
+                dialog.setMessage("정답! 축하합니다!\n기록 : " + timer.getElapsedTimeString())
+                        .setPositiveButton("확인", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 saveAchievement();
-                            }
-                        })
-                        .setNegativeButton("아니오", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-
-                                try {
-                                    DatabaseHelper DBHelper = DatabaseHelper.newInstance(getApplicationContext());
-                                    SQLiteDatabase database = DBHelper.getWritableDatabase();
-                                    database.execSQL("DELETE FROM GameState WHERE difficulty = '" + difficulty + "';");
-                                } catch (Exception e) {
-                                    //Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
-                                }finally {
-                                    dialogInterface.cancel();
-                                    finish();
-                                }
-
                             }
                         })
                         .show();
@@ -617,6 +610,7 @@ public class GameActivity extends AppCompatActivity {
             values.put("difficulty", difficulty);
             values.put("date", formatFactory.format(Calendar.getInstance().getTime()));
             values.put("elapsedSeconds", timer.getElapsedSeconds());
+            values.put("hintCnt", hintCnt);
 
             database.insert("achievement", null, values);
             database.execSQL("DELETE FROM GameState WHERE difficulty = '" + difficulty + "';");
@@ -637,23 +631,8 @@ public class GameActivity extends AppCompatActivity {
 
     public void onClickSolve() {
         if(status >= 0) {
-            AlertDialog.Builder dialog = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog);
-            dialog.setMessage("Nếu sử dụng tính năng này, kết quả của bạn sẽ không được công nhận trên bảng xếp hạng. \nBạn có chắc chắn muốn sử dụng?")
-                    .setTitle("Chú ý\n")
-                    .setPositiveButton("Đồng ý", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            status = -2;
-                            onClickSolve();
-                        }
-                    })
-                    .setNegativeButton("Từ chối", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            dialogInterface.cancel();
-                        }
-                    })
-                    .show();
+            status = -2;
+            onClickSolve();
         }
 
         if(status < 0) {
