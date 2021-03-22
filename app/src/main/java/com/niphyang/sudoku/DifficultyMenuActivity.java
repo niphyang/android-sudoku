@@ -15,6 +15,8 @@ import android.view.Display;
 import android.view.View;
 import android.widget.Button;
 
+import com.niphyang.utils.CPreferences;
+
 public class DifficultyMenuActivity extends AppCompatActivity {
     private  int selectedDifficulty;
 
@@ -125,6 +127,7 @@ public class DifficultyMenuActivity extends AppCompatActivity {
                                 intent.putExtra("difficulty", selectedDifficulty);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 DifficultyMenuActivity.this.startActivity(intent);
+                                CPreferences.setPreferences(getApplicationContext(),selectedDifficulty + "-NOTE_IDX", "");
                                 finish();
                             }
                         })
@@ -134,6 +137,9 @@ public class DifficultyMenuActivity extends AppCompatActivity {
 
             }else{
 
+
+
+                CPreferences.setPreferences(getApplicationContext(),selectedDifficulty + "-NOTE_IDX", "");
 
                 View progress = findViewById(R.id.base_progressBar);
                 progress.setVisibility(View.VISIBLE);

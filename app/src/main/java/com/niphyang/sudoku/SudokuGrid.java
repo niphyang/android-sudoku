@@ -3,11 +3,14 @@ package com.niphyang.sudoku;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
+
+import com.niphyang.utils.CPreferences;
 
 public class SudokuGrid {
     private Context mContext;
@@ -16,16 +19,21 @@ public class SudokuGrid {
     private Box[] mBoxes = new Box[9];
     private Cell mSelectedCell;
     private int[][] mSolution = new int[9][9];
+    private int[][] mMasks = new int[9][9];
+    private int mDifficulty;
 
-    public SudokuGrid(Context context, int[][] masks, int[][] solution) {
+    public SudokuGrid(Context context, int[][] masks, int[][] solution, int difficulty) {
         mContext = context;
         mGridView = ((Activity) context).findViewById(R.id.grid_sudoku);
+        mDifficulty = difficulty;
+        String noteIdx = CPreferences.getPreferences(context,difficulty + "-NOTE_IDX");
 
         for (int row = 0; row < 9; ++row) {
             for (int col = 0; col < 9; ++col) {
                 int box = (row / 3) * 3 + col / 3;
                 // copy solution
                 mSolution[row][col] = solution[row][col];
+                mMasks[row][col] = masks[row][col];
 
                 // initialize cell
                 int highlightColor = (solution[row][col] <= 9) ? R.color.HIGHLIGHT_LOCKED_CELL_COLOR : R.color.HIGHLIGHT_EMPTY_CELL_COLOR;
@@ -33,6 +41,14 @@ public class SudokuGrid {
 
                 mCells[row][col] = new Cell(context.getApplicationContext(), row * 9 + col, highlightColor, defaultColor);
                 mCells[row][col].setMask(masks[row][col]);
+
+                String _idx = ",_" + (row * 9 + col) + "_";
+                if(noteIdx.contains(_idx)){
+
+                    mCells[row][col].setMarked(true);
+
+                }
+
 
             }
         }
@@ -46,6 +62,32 @@ public class SudokuGrid {
 
         SudokuGridAdapter gridAdapter = new SudokuGridAdapter(mBoxes);
         mGridView.setAdapter(gridAdapter);
+    }
+
+    public void setFocusInit(){
+
+        String noteIdx = CPreferences.getPreferences(mContext,mDifficulty + "-NOTE_IDX");
+
+        for (int row = 0; row < 9; ++row) {
+            for (int col = 0; col < 9; ++col) {
+                int box = (row / 3) * 3 + col / 3;
+                // copy solution
+                mSolution[row][col] = mSolution[row][col];
+
+                // initialize cell
+                int highlightColor = (mSolution[row][col] <= 9) ? R.color.HIGHLIGHT_LOCKED_CELL_COLOR : R.color.HIGHLIGHT_EMPTY_CELL_COLOR;
+                int defaultColor = (box % 2 == 0) ? R.color.EVEN_BOX_COLOR : R.color.ODD_BOX_COLOR;
+
+                mCells[row][col] = new Cell(mContext, row * 9 + col, highlightColor, defaultColor);
+                mCells[row][col].setMask(mMasks[row][col]);
+
+                String _idx = ",_" + (row * 9 + col) + "_";
+                if(noteIdx.contains(_idx)){
+                    mCells[row][col].setMarked(true);
+                }
+            }
+        }
+
     }
 
     public int[][] getCurrentMasks() {
@@ -107,6 +149,7 @@ public class SudokuGrid {
         int row = index / 9;
         int col = index - row * 9;
         mSelectedCell = mCells[row][col];
+
     }
 
     public boolean isLegalGrid() {

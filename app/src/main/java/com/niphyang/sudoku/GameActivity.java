@@ -3,6 +3,7 @@ package com.niphyang.sudoku;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -36,6 +37,7 @@ import com.google.android.gms.ads.rewarded.RewardItem;
 import com.google.android.gms.ads.rewarded.RewardedAd;
 import com.google.android.gms.ads.rewarded.RewardedAdCallback;
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
+import com.niphyang.utils.CPreferences;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -64,12 +66,14 @@ public class GameActivity extends AppCompatActivity {
 
     /* game state */
     private int[][] solution;
-    private int difficulty;
+    private static int difficulty;
     static private int status; // -3 game done | -2: auto solved | -1: auto fill | 0: playing | 1: player solved
     private Timer timer;
     private int hintCnt;
 
-    // TEST
+    private static Context context;
+
+//    // TEST
 //    private String [] rewardsAdUnitIdArr = {
 //            "ca-app-pub-3940256099942544/5224354917"
 //            ,"ca-app-pub-3940256099942544/5224354917"
@@ -102,7 +106,7 @@ public class GameActivity extends AppCompatActivity {
             }
         }
 
-        grid = new SudokuGrid(this, masks, solution);
+        grid = new SudokuGrid(this, masks, solution, difficulty);
 
         //정답 채우기
         //grid.showSolution();
@@ -128,7 +132,7 @@ public class GameActivity extends AppCompatActivity {
             }
         }
 
-        grid = new SudokuGrid(this, masks, solution);
+        grid = new SudokuGrid(this, masks, solution ,difficulty);
     }
 
     private void saveGame() {
@@ -240,6 +244,8 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game);
 
 
+        context = this;
+
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
@@ -329,6 +335,8 @@ public class GameActivity extends AppCompatActivity {
         Cell selectedCell = grid.getSelectedCell();
         if (selectedCell != null) {
             numpad.update(selectedCell.getMask(), selectedCell.isMarked());
+
+            setSelectSameCell(selectedCell.getIndex());
         }
     }
 
@@ -444,7 +452,7 @@ public class GameActivity extends AppCompatActivity {
                             SQLiteDatabase database = DBHelper.getWritableDatabase();
 
                             database.execSQL("DELETE FROM GameState WHERE difficulty = '" + difficulty + "';");
-
+                            CPreferences.setPreferences(context,difficulty + "-NOTE_IDX", "");
 
 
 
@@ -484,12 +492,17 @@ public class GameActivity extends AppCompatActivity {
             }
         }
 
+        String noteIdx = CPreferences.getPreferences(context,difficulty + "-NOTE_IDX");
 
-
-
-        if (isHaveEmpty) {
+        if(noteIdx.length() > 0){
             //빈 칸이 있다
-            Toast.makeText(this, "빈 칸을 채워주세요", LENGTH_LONG).show();
+            Toast.makeText(this, "노트는 제출 할 수 없습니다.", LENGTH_LONG).show();
+            return;
+        }
+
+        if (isHaveEmpty ) {
+            //빈 칸이 있다
+            Toast.makeText(this, "빈 칸을 채워주세요.", LENGTH_LONG).show();
             return;
         }
         if (solver.checkValidGrid(grid.getNumbers())) {
@@ -615,6 +628,7 @@ public class GameActivity extends AppCompatActivity {
 
             database.insert("achievement", null, values);
             database.execSQL("DELETE FROM GameState WHERE difficulty = '" + difficulty + "';");
+            CPreferences.setPreferences(context,difficulty + "-NOTE_IDX", "");
 
 
         } catch (Exception e) {
@@ -654,7 +668,6 @@ public class GameActivity extends AppCompatActivity {
         if(status < -1) return;
         Cell selectedCell = grid.getSelectedCell();
         if (number < 10) {
-
             // backup current selected cell state
             stack.push(selectedCell.getState());
 
@@ -669,6 +682,26 @@ public class GameActivity extends AppCompatActivity {
         } else if (number == 10) {
             // mark selected cell
             selectedCell.setMarked(!selectedCell.isMarked());
+
+            String noteIdx = CPreferences.getPreferences(context,difficulty + "-NOTE_IDX");
+
+            if(selectedCell.isMarked()){
+                CPreferences.setPreferences(context,difficulty + "-NOTE_IDX", noteIdx + ",_" + selectedCell.getIndex()+"_");
+            }else{
+
+                if(String.valueOf(selectedCell.getText()).length() > 1){
+                    Toast.makeText(context, "두개 이상의 노트가 포함되어 있습니다.", Toast.LENGTH_SHORT).show();
+                    selectedCell.setMarked(!selectedCell.isMarked());
+                }else{
+                    String delNoteIdx = noteIdx.replace(",_" + selectedCell.getIndex() + "_", "");
+                    CPreferences.setPreferences(context,difficulty + "-NOTE_IDX", delNoteIdx);
+                }
+
+            }
+
+
+
+
         } else if (number == 11) {
             // restore previous selected cell state
             if (!stack.isEmpty()) {
@@ -693,5 +726,39 @@ public class GameActivity extends AppCompatActivity {
 
     public static void setSelectedCell(int index) {
         grid.setSelectedCell(index);
+      //  setSelectSameCell(index);
+    }
+    public static void setSelectSameCell(int index){
+        Cell selectCell = grid.getSelectedCell();
+
+
+        GameActivity.highlightNeighborCells(index);
+        if (selectCell.isLocked()) {
+            GameActivity.setNumpadVisible(View.INVISIBLE);
+        } else {
+            selectCell.setBackgroundResource(selectCell.isMarked() ? R.color.MARKED_CELL_COLOR : R.color.TARGET_CELL_COLOR);
+            GameActivity.setNumpadVisible(View.VISIBLE);
+        }
+
+
+        if(!selectCell.isMarked()){
+
+            for(int i=0;i<9;i++){
+                for(int j=0;j<9;j++){
+
+
+
+
+                    Cell compareCell = grid.getCell(i,j);
+                    if(selectCell.getNumber() != 0
+//                           && compareCell.getIndex()!=index
+                            && !compareCell.isMarked()
+                            && compareCell.getNumber() == selectCell.getNumber()){
+
+                        compareCell.setBackgroundResource(R.color.TARGET_CELL_COLOR);
+                    }
+                }
+            }
+        }
     }
 }

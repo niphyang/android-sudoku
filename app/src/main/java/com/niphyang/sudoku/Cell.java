@@ -153,6 +153,7 @@ public class Cell extends androidx.appcompat.widget.AppCompatTextView {
         }
         GameActivity.setSelectedCell(index);
         GameActivity.updateNumpad();
+
         return true;
     }
 }
