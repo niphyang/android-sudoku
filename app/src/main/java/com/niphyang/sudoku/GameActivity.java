@@ -83,11 +83,11 @@ public class GameActivity extends AppCompatActivity {
 //    };
 
     // REAL
-    private String [] rewardsAdUnitIdArr = { "ca-app-pub-2327476184552798/2721932269"
-            , "ca-app-pub-2327476184552798/4169194545"
-            , "ca-app-pub-2327476184552798/5733557653"
-            , "ca-app-pub-2327476184552798/7467465246"
-            , "ca-app-pub-2327476184552798/6154383572"};
+    private String [] rewardsAdUnitIdArr = { "ca-app-pub-2327476184552798/4275014051"
+            , "ca-app-pub-2327476184552798/5396524030"
+            , "ca-app-pub-2327476184552798/1457279024"
+            , "ca-app-pub-2327476184552798/7344030525"
+            , "ca-app-pub-2327476184552798/3891870676"};
 
     private void generateGrid() {
         // generate a grid
