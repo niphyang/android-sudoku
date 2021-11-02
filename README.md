@@ -1,7 +1,7 @@
 # android-sudoku
 
 
-### [ 기능 개선 사항 ]
+### [ 기능 개선 예정 사항 ]
 
 1. Custom Dialog 
    - Dialog 출력시 광고 삽입 (WebView)
